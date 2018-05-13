@@ -1,10 +1,17 @@
 require('./index.css')
 import Vue from 'vue'
 
-let vm = new Vue({
+const vm = new Vue({
   el: "#app",
   data: {
-     msg: 'hella'
+    msg: 'hella',
+    isShowPlayIcon: true
+  },
+  methods: {
+    playVideo() {
+      this.isShowPlayIcon = false
+      this.$refs.BalalaVideo.play()
+    }
   }
 })
 
@@ -12,6 +19,6 @@ let vm = new Vue({
 
 
 
-if (module.hot) {
-   module.hot.accept()
-}
+// if (module.hot) {
+//    module.hot.accept()
+// }

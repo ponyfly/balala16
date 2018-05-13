@@ -3,9 +3,10 @@
 #app .creater{ position: relative; height:823px;overflow:hidden;}
 #app .creater .creater-bg {display: block; width:100%;}
 #app .creater .creater-c { position: absolute; top:0; left:0; width:100%; height:100%;background-color: rgba(0,0,0,.8);}
-#app .creater .creater-c .video-a{ height:727px;}
-#app .creater .creater-c .video-a .video{margin-top: 23px; height:704px; width:100%;}
-#app .creater .creater-c .info{ height:96px;}
+#app .creater .creater-c .video-a{ height:727px; position: relative;}
+#app .creater .creater-c .video-a .play-icon{ position: absolute; top:0; right:0;bottom:0;left:0;z-index: 999; margin:auto;width:102px; height:104px;}
+#app .creater .creater-c .video-a .video{ position: absolute; left:50%; bottom:0;transform:translateX(-50%);margin-top: 23px; height:704px}
+#app .creater .creater-c .info{display: flex; height:96px; justify-content: space-between;align-items: center; color: #fff;}
 
 /*广告*/
 #app .ad { position: fixed; left:0;bottom: 0; width:750px; height:85px;}

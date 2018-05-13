@@ -29,7 +29,7 @@ module.exports = merge(base, {
   devtool: 'cheap-module-eval-source-map',
   devServer: {
     contentBase: utils.absolutePath('dist'), //静态文件根目录
-    host: 'localhost',
+    host: '0.0.0.0',
     port: 9000, // 端口
     hot: true,
     open: true

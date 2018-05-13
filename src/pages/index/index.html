@@ -11,10 +11,29 @@
   <div class="creater">
     <img class="creater-bg" src="../../imgs/icon-1-7.png">
     <div class="creater-c">
-      <div class="video-a">
-        <video class="video" src="https://weappstatic1.j.cn/video/joke/180507/0042/825fe452514c11e8.mp4" poster="https://weappstatic1.j.cn/img/joke/180507/0052/cbaeca96514d11e8.jpg?imageslim" controls></video>
+      <div class="video-a" @click="playVideo">
+        <video class="video"
+               src="https://weappstatic1.j.cn/video/joke/180507/0042/825fe452514c11e8.mp4"
+               poster="https://weappstatic1.j.cn/img/joke/180507/0052/cbaeca96514d11e8.jpg?imageslim"
+               x5-video-player-type="h5"
+               ref="BalalaVideo">
+        </video>
+        <img class="play-icon" src="../../imgs/icon-1-1.png" alt="" v-show="isShowPlayIcon">
       </div>
-      <div class="info"></div>
+      <div class="info">
+        <div class="info-1">
+          <img class="avator" src="../../imgs/icon-1-8.png" alt="">
+          <span>晨曦铁头功</span>
+        </div>
+        <div class="info-2">
+          <img src="../../imgs/icon-1-2.png" alt="">
+          <span>1252</span>
+        </div>
+        <div class="info-3">
+          <img src="../../imgs/icon-1-5.png" alt="">
+          <span>666</span>
+        </div>
+      </div>
     </div>
   </div>
 
