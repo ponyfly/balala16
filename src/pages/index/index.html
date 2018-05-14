@@ -18,7 +18,7 @@
                x5-video-player-type="h5"
                ref="BalalaVideo">
         </video>
-        <img class="play-icon" src="../../imgs/icon-1-1.png" alt="" v-show="isShowPlayIcon">
+        <img class="play-icon" src="../../imgs/icon-1-1.png" alt="" v-show="showPlayIcon">
       </div>
       <div class="infos">
         <div class="info info-1">
@@ -39,12 +39,22 @@
 
   <!--填写评论、点赞区域-->
   <div class="operation clearfix">
-    <textarea name="" id="" cols="30" rows="10" maxlength="120" class="input-radius active" placeholder="说说你的看法"></textarea>
-    <div class="publish"></div>
+    <textarea
+        class="input-radius"
+        maxlength="120"
+        placeholder="说说你的看法"
+        v-model="commentText"
+        :class="{active: showActiveClass}"
+        @focus="changeHeight(true)">
+    </textarea>
+    <div class="publish"
+         v-show="showActiveClass"
+         @click="publishComment">发表</div>
     <div class="star">
       <img src="../../imgs/icon-1-10.png" alt="">
       <span>3663</span>
     </div>
+    <div class="tip-panel" v-if="showTipPanel">{{tipContent}}</div>
   </div>
 
   <!--评论列表区域-->
@@ -99,9 +109,9 @@
   </div>
 
   <!--广告区域-->
-  <div class="ad">
-    <div class="download"></div>
-    <div class="close"></div>
+  <div class="ad" v-if="showFixBottom">
+    <div class="download" @click="linkToAppStore"></div>
+    <div class="close" @click="closeFixBottom"></div>
   </div>
 
   <!--评论成功，点赞成功-->

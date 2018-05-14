@@ -18,13 +18,15 @@
 .info:after {content: "";display: inline-block;height:100%;vertical-align: middle; }
 
 /*填写评论、点赞区域*/
-#app .operation { padding:25px 40px;}
+#app .operation { padding:25px 40px; position: relative;}
 #app .operation .input-radius{float: left;width: 530px; height: 78px;border-radius: 39px; border:1px solid #b9b8b8;background-color:#eaeaea;line-height: 50px;font-size: 30px; color: #575757; padding:13px 35px;outline: none}
 #app .operation .star{float: right; width:118px; padding:11px 0; background-color: #f6f3f3;border-radius: 39px;}
 #app .operation .star img{display: block; width:40px; height:35px; margin:0 auto;}
 #app .operation .star span{display:block;font-size: 18px; color: #414141;text-align: center;line-height:1;margin-top: 4px}
 /*弹出键盘*/
 #app .operation .input-radius.active{height:175px;}
+#app .operation .publish{ float: right;margin-bottom:16px;width:118px;height:78px; line-height: 78px; text-align: center;border-radius: 39px; color: #fff;font-size: 28px; background-color: #f6a;}
+#app .operation .tip-panel{ position: absolute; top:0; right:118px; bottom: 0; left:0;margin: auto; width:250px; height:40px; background-color: rgba(0,0,0,.6); color: #fff;text-align: center}
 
 
 /*评论列表*/
