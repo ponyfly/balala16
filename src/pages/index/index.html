@@ -20,36 +20,97 @@
         </video>
         <img class="play-icon" src="../../imgs/icon-1-1.png" alt="" v-show="isShowPlayIcon">
       </div>
-      <div class="info">
-        <div class="info-1">
+      <div class="infos">
+        <div class="info info-1">
           <img class="avator" src="../../imgs/icon-1-8.png" alt="">
           <span>晨曦铁头功</span>
         </div>
-        <div class="info-2">
-          <img src="../../imgs/icon-1-2.png" alt="">
-          <span>1252</span>
-        </div>
-        <div class="info-3">
+        <div class="info info-3">
           <img src="../../imgs/icon-1-5.png" alt="">
           <span>666</span>
+        </div>
+        <div class="info info-2">
+          <img src="../../imgs/icon-1-2.png" alt="">
+          <span>1252</span>
         </div>
       </div>
     </div>
   </div>
 
   <!--填写评论、点赞区域-->
-  <div class="operation">
-
+  <div class="operation clearfix">
+    <textarea name="" id="" cols="30" rows="10" maxlength="120" class="input-radius active" placeholder="说说你的看法"></textarea>
+    <div class="publish"></div>
+    <div class="star">
+      <img src="../../imgs/icon-1-10.png" alt="">
+      <span>3663</span>
+    </div>
   </div>
 
   <!--评论列表区域-->
   <div class="comments">
-
+    <ul>
+      <li class="comment">
+        <div class="content-r">
+          <div class="content-t clearfix">
+            <div class="nickname">初默默</div>
+            <div class="post-time">
+              <img src="../../imgs/icon-1-4.png" alt="">
+              <span>05月16日</span>
+            </div>
+          </div>
+          <div class="content-b">神一样的演技~演技非凡的神，戏里的神，神里的戏子</div>
+        </div>
+        <div class="avator">
+          <img src="../../imgs/icon-1-8.png" alt="">
+        </div>
+      </li>
+      <li class="comment">
+        <div class="content-r">
+          <div class="content-t clearfix">
+            <div class="nickname">初默默</div>
+            <div class="post-time">
+              <img src="../../imgs/icon-1-4.png" alt="">
+              <span>05月16日</span>
+            </div>
+          </div>
+          <div class="content-b">神一样的演技~演技非凡的神，戏里的神，神里的戏子,神一样的演技~演技非凡的神，戏里的神，神里的戏子</div>
+        </div>
+        <div class="avator">
+          <img src="../../imgs/icon-1-8.png" alt="">
+        </div>
+      </li>
+      <li class="comment">
+        <div class="content-r">
+          <div class="content-t clearfix">
+            <div class="nickname">初默默</div>
+            <div class="post-time">
+              <img src="../../imgs/icon-1-4.png" alt="">
+              <span>05月16日</span>
+            </div>
+          </div>
+          <div class="content-b">神一样的演技~</div>
+        </div>
+        <div class="avator">
+          <img src="../../imgs/icon-1-8.png" alt="">
+        </div>
+      </li>
+    </ul>
   </div>
 
   <!--广告区域-->
   <div class="ad">
-    <img class="ad-img" src="../../imgs/icon-1-6.png" alt="">
+    <div class="download"></div>
+    <div class="close"></div>
+  </div>
+
+  <!--评论成功，点赞成功-->
+  <div v-if="false" class="mask" @touchmove.prevent>
+    <div class="main">
+      <img src="../../imgs/icon-1-12.png" alt="">
+      <div class="download"></div>
+      <div class="close"></div>
+    </div>
   </div>
 </div>
 </body>
