@@ -9,12 +9,17 @@ const vm = new Vue({
     showActiveClass: false,
     commentText: '',
     showTipPanel: false,
-    tipContent: ''
+    tipContent: '',
+    isLike: false
   },
   methods: {
-    playVideo() {
-      this.showPlayIcon = false
-      this.$refs.BalalaVideo.play()
+    controlVideo() {
+      if(this.showPlayIcon) {
+        this.$refs.BalalaVideo.play()
+      } else {
+        this.$refs.BalalaVideo.pause()
+      }
+      this.showPlayIcon = !this.showPlayIcon
     },
     linkToAppStore() {
       window.location.href = ''
@@ -46,6 +51,12 @@ const vm = new Vue({
         this.tipContent = ''
         this.showTipPanel = false
       },1000)
+    },
+    videoEndHandler() {
+      this.showPlayIcon = true
+    },
+    showLike() {
+      this.isLike = true
     }
   }
 })

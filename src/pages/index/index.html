@@ -11,12 +11,12 @@
   <div class="creater">
     <img class="creater-bg" src="../../imgs/icon-1-7.png">
     <div class="creater-c">
-      <div class="video-a" @click="playVideo">
+      <div class="video-a" @click="controlVideo">
         <video class="video"
                src="https://weappstatic1.j.cn/video/joke/180507/0042/825fe452514c11e8.mp4"
                poster="https://weappstatic1.j.cn/img/joke/180507/0052/cbaeca96514d11e8.jpg?imageslim"
                x5-video-player-type="h5"
-               ref="BalalaVideo">
+               ref="BalalaVideo" @ended="videoEndHandler">
         </video>
         <img class="play-icon" src="../../imgs/icon-1-1.png" alt="" v-show="showPlayIcon">
       </div>
@@ -51,7 +51,8 @@
          v-show="showActiveClass"
          @click="publishComment">发表</div>
     <div class="star">
-      <img src="../../imgs/icon-1-10.png" alt="">
+      <img src="../../imgs/icon-1-9.png" v-if="!isLike" @click.once="showLike">
+      <img src="../../imgs/icon-1-10.png" v-else>
       <span>3663</span>
     </div>
     <div class="tip-panel" v-if="showTipPanel">{{tipContent}}</div>
