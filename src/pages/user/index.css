@@ -1,0 +1,13 @@
+@import "../../common/reset.min.css";
+#app{ width:750px; height:100%; margin:0 auto;background: #fff;overflow: visible}
+#app .userinfo .t{ padding:30px; background-color: #ccc;}
+#app .userinfo .t .avator{float: left; width:150px; height:150px;border-radius: 75px}
+#app .userinfo .t .follow{float: right;margin-top:36px;width:176px; height:78px; background-color: #ff1652;border-radius: 39px;font-size: 32px;line-height:78px;text-align: center;color: #fff}
+#app .userinfo .b{}
+#app .userinfo .r{}
+#app .userinfo .b .l{float:left}
+#app .userinfo .b .r{float:right}
+#app .userinfo .b .l .nickname{font-size: 42px;font-weight: bold; color: #363636;}
+#app .userinfo .b .l img{ width:14px; height:21px}
+#app .userinfo .b .r img{width:34px; height:27px}
+#app .userinfo .b .r span{width:34px; height:27px; color: #333;font-size: 24px;}
