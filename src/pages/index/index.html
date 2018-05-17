@@ -7,38 +7,41 @@
 </head>
 <body>
 <div id="app">
-  <!--视频创建者的所有信息-->
-  <div class="creater">
-    <img class="creater-bg" src="../../imgs/icon-1-7.png">
-    <div class="creater-c">
-      <div class="video-a" @click="controlVideo">
-        <video class="video"
-               src="https://weappstatic1.j.cn/video/joke/180507/0042/825fe452514c11e8.mp4"
-               poster="https://weappstatic1.j.cn/img/joke/180507/0052/cbaeca96514d11e8.jpg?imageslim"
-               x5-video-player-type="h5"
-               ref="BalalaVideo" @ended="videoEndHandler">
-        </video>
-        <img class="play-icon" src="../../imgs/icon-1-1.png" alt="" v-show="showPlayIcon">
-      </div>
-      <div class="infos">
-        <div class="info info-1">
-          <img class="avator" src="../../imgs/icon-1-8.png" alt="">
-          <span>晨曦铁头功</span>
+  <div class="page" v-if="works !== null" ref="BsContainer">
+    <!--视频创建者的所有信息-->
+    <div class="creater" v-if="">
+      <img class="creater-bg" src="../../imgs/icon-1-7.png">
+      <div class="creater-c">
+        <div class="video-a" @click="controlVideo">
+          <video class="video"
+                 :src="works.movie.waterMarkUrl || works.movie.url"
+                 :poster="works.worksPic.url"
+                 x5-video-player-type="h5"
+                 ref="BalalaVideo"
+                 preload
+                 @ended="videoEndHandler">
+          </video>
+          <img class="play-icon" src="../../imgs/icon-1-1.png" alt="" v-show="showPlayIcon">
         </div>
-        <div class="info info-3">
-          <img src="../../imgs/icon-1-5.png" alt="">
-          <span>666</span>
-        </div>
-        <div class="info info-2">
-          <img src="../../imgs/icon-1-2.png" alt="">
-          <span>1252</span>
+        <div class="infos">
+          <div class="info info-1">
+            <img class="avator" :src="works.user.headUrl" @click="goToUserCenter(-1)">
+            <span>{{works.user.nickName}}</span>
+          </div>
+          <div class="info info-3">
+            <img src="../../imgs/icon-1-5.png" alt="">
+            <span>{{works.replyCount}}</span>
+          </div>
+          <div class="info info-2">
+            <img src="../../imgs/icon-1-2.png" alt="">
+            <span>{{works.watchCount}}</span>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!--填写评论、点赞区域-->
-  <div class="operation clearfix">
+    <!--填写评论、点赞区域-->
+    <div class="operation clearfix">
     <textarea
         class="input-radius"
         maxlength="120"
@@ -47,80 +50,52 @@
         :class="{active: showActiveClass}"
         @focus="changeHeight(true)">
     </textarea>
-    <div class="publish"
-         v-show="showActiveClass"
-         @click="publishComment">发表</div>
-    <div class="star">
-      <img src="../../imgs/icon-1-9.png" v-if="!isLike" @click.once="showLike">
-      <img src="../../imgs/icon-1-10.png" v-else>
-      <span>3663</span>
+      <div class="publish"
+           v-show="showActiveClass"
+           @click="publishComment">发表</div>
+      <div class="star">
+        <img src="../../imgs/icon-1-9.png" v-if="!isLike" @click.once="showLike">
+        <img src="../../imgs/icon-1-10.png" v-else>
+        <span>{{works.likeCount}}</span>
+      </div>
+      <div class="tip-panel" v-if="showTipPanel">{{tipContent}}</div>
     </div>
-    <div class="tip-panel" v-if="showTipPanel">{{tipContent}}</div>
-  </div>
 
-  <!--评论列表区域-->
-  <div class="comments">
-    <ul>
-      <li class="comment">
-        <div class="content-r">
-          <div class="content-t clearfix">
-            <div class="nickname">初默默</div>
-            <div class="post-time">
-              <img src="../../imgs/icon-1-4.png" alt="">
-              <span>05月16日</span>
+    <!--评论列表区域-->
+    <div class="comments">
+      <ul v-if="commentList.length > 0">
+        <li class="comment" v-for="(comment, index) in commentList" :key="comment.user.id">
+          <div class="content-r">
+            <div class="content-t clearfix">
+              <div class="nickname">{{comment.user.nickName}}</div>
+              <div class="post-time">
+                <img src="../../imgs/icon-1-4.png" alt="">
+                <span>{{comment.replyTime}}</span>
+              </div>
             </div>
+            <div class="content-b">{{comment.content}}</div>
           </div>
-          <div class="content-b">神一样的演技~演技非凡的神，戏里的神，神里的戏子</div>
-        </div>
-        <div class="avator">
-          <img src="../../imgs/icon-1-8.png" alt="">
-        </div>
-      </li>
-      <li class="comment">
-        <div class="content-r">
-          <div class="content-t clearfix">
-            <div class="nickname">初默默</div>
-            <div class="post-time">
-              <img src="../../imgs/icon-1-4.png" alt="">
-              <span>05月16日</span>
-            </div>
+          <div class="avator">
+            <img :src="comment.user.headUrl" @click="goToUserCenter(index)">
           </div>
-          <div class="content-b">神一样的演技~演技非凡的神，戏里的神，神里的戏子,神一样的演技~演技非凡的神，戏里的神，神里的戏子</div>
-        </div>
-        <div class="avator">
-          <img src="../../imgs/icon-1-8.png" alt="">
-        </div>
-      </li>
-      <li class="comment">
-        <div class="content-r">
-          <div class="content-t clearfix">
-            <div class="nickname">初默默</div>
-            <div class="post-time">
-              <img src="../../imgs/icon-1-4.png" alt="">
-              <span>05月16日</span>
-            </div>
-          </div>
-          <div class="content-b">神一样的演技~</div>
-        </div>
-        <div class="avator">
-          <img src="../../imgs/icon-1-8.png" alt="">
-        </div>
-      </li>
-    </ul>
-  </div>
+        </li>
+      </ul>
+    </div>
 
-  <!--广告区域-->
-  <div class="ad" v-if="showFixBottom">
-    <div class="download" @click="linkToAppStore"></div>
-    <div class="close" @click="closeFixBottom"></div>
-  </div>
+    <!--广告区域-->
+    <div class="ad" v-if="showFixBottom">
+      <div class="download" @click="linkToAppStore"></div>
+      <div class="close" @click="closeFixBottom"></div>
+    </div>
 
-  <!--评论成功，点赞成功-->
-  <div v-if="false" class="mask" @touchmove.prevent>
-    <div class="main">
-      <img src="../../imgs/icon-1-12.png" alt="">
-      <div class="download"></div>
-      <div class="close"></div>
+    <!--评论成功，点赞成功-->
+    <div v-if="maskType" class="mask" @touchmove.prevent>
+      <div class="main">
+        <img v-if="maskType==='like'" src="../../imgs/icon-1-12.png" alt="">
+        <img v-if="maskType==='comment'" src="../../imgs/icon-1-13.png" alt="">
+        <div class="download" @click="linkToAppStore"></div>
+        <div class="close" @click="closeMask"></div>
+      </div>
     </div>
   </div>
 </div>

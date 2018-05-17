@@ -1,5 +1,6 @@
 @import "../../common/reset.min.css";
 #app{ width:750px; height:100%; margin:0 auto;background: #fff;overflow: visible}
+#app .page{ height:calc(100% + 1px);}
 /*creater样式*/
 #app .creater{ position: relative; height:823px;overflow:hidden;}
 #app .creater .creater-bg {display: block; width:100%;}
@@ -13,7 +14,7 @@
 #app .creater .creater-c .infos .info:nth-of-type(n+2){ float: right;color: #999; font-size: 24px}
 #app .creater .creater-c .infos .info img{vertical-align: middle; margin-right: 10px}
 #app .creater .creater-c .infos .info:nth-of-type(3) {margin-right: 40px}
-#app .creater .creater-c .infos .info-1 .avator{ width:44px;height:44px;}
+#app .creater .creater-c .infos .info-1 .avator{ width:44px;height:44px;border-radius: 22px}
 #app .creater .creater-c .infos .info span{vertical-align: middle; }
 .info:after {content: "";display: inline-block;height:100%;vertical-align: middle; }
 
@@ -25,7 +26,7 @@
 #app .operation .star span{display:block;font-size: 18px; color: #414141;text-align: center;line-height:1;margin-top: 4px}
 /*弹出键盘*/
 #app .operation .input-radius.active{height:175px;}
-#app .operation .publish{ float: right;margin-bottom:16px;width:118px;height:78px; line-height: 78px; text-align: center;border-radius: 39px; color: #fff;font-size: 28px; background-color: #f6a;}
+#app .operation .publish{ float: right;margin-bottom:16px;width:118px;height:78px; line-height: 78px; text-align: center;border-radius: 39px; color: #fff;font-size: 28px; background-color: #fe214f;}
 #app .operation .tip-panel{ position: absolute; top:0; right:118px; bottom: 0; left:0;margin: auto; width:250px; height:40px; background-color: rgba(0,0,0,.6); color: #fff;text-align: center}
 
 
@@ -39,9 +40,9 @@
 #app .comments ul .comment .content-r .content-t{line-height: 30px; padding:20px 0 12px;}
 #app .comments ul .comment .content-r .content-b{font-size: 32px; color: #101010;line-height: 40px;padding-bottom: 20px; border-bottom:1px solid #d2d2d2;text-align: justify}
 #app .comments ul .comment .content-r .content-t .nickname{float: left;font-size: 26px; color: #666666;}
-#app .comments ul .comment .content-r .content-t .post-time{float: right}
+#app .comments ul .comment .content-r .content-t .post-time{float: right; width:120px;}
 #app .comments ul .comment .content-r .content-t .post-time img{ width:18px; height:18px;}
-#app .comments ul .comment .content-r .content-t .post-time span{ color: #5d5d5d;font-size: 20px}
+#app .comments ul .comment .content-r .content-t .post-time span{ color: #5d5d5d;font-size: 20px;}
 
 /*广告*/
 #app .ad { position: fixed; left:0;bottom: 0; width:750px; height:85px;background: url("../../imgs/icon-1-6.png") no-repeat;background-size: cover}
