@@ -13,7 +13,7 @@ const vm = new Vue({
     showTipPanel: false,
     tipContent: '',
     isLike: false,
-    works:null,
+    works:{},
     maskType: '',
     nextPageRecord: '',
     loadedAll: false,
@@ -24,7 +24,7 @@ const vm = new Vue({
   methods: {
     _initStaticVal() {
       this.worksId = TOOLS._GetQueryString('id') || 80569
-      this.shareUserId = TOOLS._GetQueryString('shareUserId') || 11346
+      this.shareUserId = TOOLS._GetQueryString('shareUserId') || ''
     },
     _getWorksShareDetail(){
       const config = {
@@ -41,7 +41,10 @@ const vm = new Vue({
         })
     },
     _getReplyList() {
-      if(this.loadedAll) return
+      if(this.loadedAll){
+        console.log('加载完了...')
+        return
+      }
       const config = {
         method: 'post',
         url: TOOLS.apis.replyList,
@@ -69,13 +72,21 @@ const vm = new Vue({
       }
       this.showPlayIcon = !this.showPlayIcon
     },
-    linkToAppStore() {
+    linkToAppStore(opt) {
+      if(opt === 'get') {
+        TOOLS._send1_1('Download_get')
+      } else if(opt === 'like') {
+        TOOLS._send1_1('Download_tan_zan')
+      } else if(opt === 'comment') {
+        TOOLS._send1_1('Download_tan_ping')
+      }
       window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=cn.j.tock&ckey=CK1385982821822'
     },
     closeFixBottom() {
       this.showFixBottom = false
     },
     changeHeight(isActive) {
+      TOOLS._send1_1('Click_Comment')
       this.showActiveClass = isActive
     },
     publishComment() {
@@ -114,16 +125,12 @@ const vm = new Vue({
         })
       }
       TOOLS._ajaxGetData(config)
-        .then(({data}) => {
-          this.works = data.works
+        .then(() => {
+          this.commentText = ''
+          this.changeHeight(false)
+          this.maskType = 'comment'
         })
-
-
-      setTimeout(()=> {
-        this.commentText = ''
-        this.changeHeight(false)
-        this.maskType = 'comment'
-      },600)
+      TOOLS._send1_1('Click_Comment_finish')
     },
     controlTipPanel(text) {
       this.tipContent = text
@@ -140,19 +147,34 @@ const vm = new Vue({
       this.works.likeCount++
       this.isLike = true
       this.maskType = 'like'
+      TOOLS._send1_1('Click_Like')
       this.attentionOn()
     },
     closeMask() {
       this.maskType = ''
     },
     _getNewestUserId() {
-      TOOLS._ajaxGetData()
-        .then(({data}) => {
-          this.newUser.id = data.userId
-        })
+      let newUserId = localStorage.getItem('newUserId') || ''
+      if(newUserId) {
+        this.newUser.id = newUserId
+        console.log('storage: ' + newUserId)
+      } else {
+        const config = {
+          method: 'post',
+          url: TOOLS.apis.getNewestUserId,
+          data: JSON.stringify({})
+        }
+        TOOLS._ajaxGetData(config)
+          .then(({data}) => {
+            this.newUser.id = data.userId
+            localStorage.setItem('newUserId', data.userId)
+            console.log('ajax:' + data.userId)
+          })
+      }
     },
     goToUserCenter(index){
       if(index === -1) {
+        TOOLS._send1_1('Click_nickname')
         window.location.href = '../user.html?userId=' + this.works.user.id
       } else{
         window.location.href = '../user.html?userId=' + this.commentList[index].id
@@ -160,8 +182,9 @@ const vm = new Vue({
     },
     _initScroll(){
       if(!this.scroll) {
-        this.scroll = new BScroll(this.$refs.BsContainer,{
+        this.scroll = new BScroll(this.$refs.ScrollContainer,{
           click: true,
+          bounce: false,
           pullUpLoad: {
             threshold: 300,
           },
@@ -199,12 +222,19 @@ const vm = new Vue({
   },
   created() {
     this._initStaticVal()
+    this._getNewestUserId()
     if(!this.worksId) return
     this._getWorksShareDetail()
     this._getReplyList()
   },
   mounted(){
-
+    const ua = navigator.userAgent.toLowerCase()
+    if(ua.indexOf('qq') > -1 || ua.indexOf('micromessenger') > -1) {
+      this.$refs.BalalaVideo.addEventListener('x5videoexitfullscreen',()=>{
+        this.$refs.BalalaVideo.pause()
+        this.showPlayIcon = true
+      })
+    }
   }
 })
 

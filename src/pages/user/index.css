@@ -1,6 +1,11 @@
 @import "../../common/reset.min.css";
+/*common*/
+[v-cloak]{display: none}
+img{ border:none;}
 .vertcial:after { content: "";display: inline-block;height:100%;vertical-align: middle; }
-#app{ width:750px; height:100%; margin:0 auto;background: #fff;overflow: visible}
+#app{ width:750px; height:100%; margin:0 auto;background: #fff}
+#app .page-container{ width:100%; height:100%;overflow: visible}
+#app .page-container .page-content{ width:100%; min-height:calc(100% + 1px)}
 
 /*用户基本信息*/
 #app .userinfo .t{ padding:30px;}
@@ -28,8 +33,8 @@
 #app .videolists .tab div .inner.active { color: #ff1652;border-bottom: 4px solid #ff1652}
 #app .videos-container { padding:9px 0 0 9px; color: #fff;}
 #app .videos-container .videos-contents {}
-#app .videos-container .videos-contents .video-item{position: relative;float: left; width:237px; height:317px; margin:0 9px 9px 0;}
-#app .videos-container .videos-contents .video-item .poster{ width:100%; height:100%; border-radius: 10px}
+#app .videos-container .videos-contents .video-item{position: relative;float: left; width:237px; height:317px; margin:0 9px 9px 0; background-color: #000;border-radius: 10px}
+#app .videos-container .videos-contents .video-item .poster{display: block; width:100%; height:100%; border-radius: 10px}
 #app .videos-container .videos-contents .video-item .video-infos{ position: absolute;bottom: 0; left:0; width:100%; height:54px; padding:0 15px;}
 #app .videos-container .videos-contents .video-item .video-infos img{ position: relative; top:-2px;}
 #app .videos-container .videos-contents .video-item .video-infos .plays{float: left;height: 100%;line-height: 54px}

@@ -50,7 +50,8 @@
     "better-scroll": "^1.11.1",
     "core-js": "^2.5.5",
     "jquery": "^1.12.4",
-    "vue": "^2.5.16"
+    "vue": "^2.5.16",
+    "vue-lazyload": "^1.2.3"
   },
   "sideEffects": false
 }

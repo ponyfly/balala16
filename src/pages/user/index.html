@@ -7,59 +7,59 @@
 </head>
 <body>
 <div id="app">
-  <div class="userinfo">
-    <div class="main-1">
-      <div class="t clearfix">
-        <img class="avator" src="../../imgs/icon-1-8.png" alt="">
-        <div class="follow">+ 关注</div>
-      </div>
-      <div class="b clearfix">
-        <div class="l">
-          <span class="nickname">忘记密码本</span>
-          <div class="icon-bg">
-            <img src="../../imgs/icon-2-2.png" alt="">
+  <div class="page-container" ref="scrollContainer">
+    <div class="page-content">
+      <div class="userinfo" v-if="Object.keys(personalInfos).length > 0" v-cloak>
+        <div class="main-1">
+          <div class="t clearfix">
+            <img class="avator" :src="personalInfos.user.headUrl" alt="">
+            <div class="follow" @click="linkToAppStore">+ 关注</div>
           </div>
-        </div>
-        <div class="r">
-          <img src="../../imgs/icon-2-1.png" alt="">
-          <span>微博主页 &gt;</span>
-        </div>
-      </div>
-    </div>
-    <div class="main-2">
-      <p>喜欢我可以关注本宝宝 <br>不喜欢也可以关注一下，每天有福利哦</p>
-      <div>
-        26.8万<span> 关注</span>
-        2<span> 粉丝</span>
-        880<span> 赞</span>
-      </div>
-    </div>
-  </div>
-  <div class="videolists">
-    <div class="tab">
-      <div class="product-header">
-        <span class="inner">作品 5852</span>
-      </div>
-      <div class="like-header">
-        <span class="inner active">喜欢 3651</span>
-      </div>
-    </div>
-    <div class="videos-container">
-      <ul class="videos-contents clearfix">
-        <li class="video-item">
-          <img class="poster" src="../../imgs/icon-2-3.png" alt="">
-          <div class="video-infos">
-            <div class="plays">
-              <img src="../../imgs/icon-2-5.png" alt="">
-              <span>2.2万</span>
-            </div>
-            <div class="star">
-              <img src="../../imgs/icon-2-4.png" alt="">
-              <span>6552</span>
+          <div class="b clearfix">
+            <div class="l">
+              <span class="nickname">{{personalInfos.user.nickName}}</span>
+              <div class="icon-bg">
+                <img src="../../imgs/icon-2-2.png" alt="">
+              </div>
             </div>
           </div>
-        </li>
-      </ul>
+        </div>
+        <div class="main-2">
+          <p>{{personalInfos.user.profile}}</p>
+          <div>
+            {{personalInfos.attentionUserCount}}<span> 关注</span>
+            {{personalInfos.fansCount}}<span> 粉丝</span>
+            {{personalInfos.receiveLikeCount}}<span> 赞</span>
+          </div>
+        </div>
+      </div>
+      <div class="videolists">
+        <div class="tab">
+          <div class="product-header" @click="toggleList(0)">
+            <span class="inner" :class="{active:worksType === 0}" v-cloak>作品 {{personalInfos.worksCount}}</span>
+          </div>
+          <div class="like-header" @click="toggleList(1)">
+            <span class="inner" :class="{active:worksType === 1}" v-cloak>喜欢 {{personalInfos.likeWorksCount}}</span>
+          </div>
+        </div>
+        <div class="videos-container" v-if="itemList.length > 0" v-cloak>
+          <ul class="videos-contents clearfix" @click.capture="linkToIndex">
+            <li class="video-item" v-for="(item, index) in itemList" :key="item.id">
+              <img class="poster" v-lazy="item.worksPic.url" :data-index="index">
+              <div class="video-infos">
+                <div class="plays">
+                  <img src="../../imgs/icon-2-5.png" alt="">
+                  <span>{{item.watchCount}}</span>
+                </div>
+                <div class="star">
+                  <img src="../../imgs/icon-2-4.png" alt="">
+                  <span>{{item.likeCount}}</span>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </div>

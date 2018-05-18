@@ -5,7 +5,7 @@ const CleanPlugin = require('clean-webpack-plugin')
 module.exports = {
   mode: 'production',
   entry: {
-    vendor: ['vue']
+    vendor: ['vue', 'better-scroll']
   },
   output: {
     path: path.resolve(__dirname, '..' , 'dist'),

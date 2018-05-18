@@ -13,6 +13,7 @@ class Tools {
 
   constructor(apis) {
     this.apis = apis
+    this.channel = 'balalatest'
   }
 
   /**
@@ -38,8 +39,9 @@ class Tools {
    * @param  {Function} callback [description]
    * @return {[type]}            [description]
    */
-  _send1_1(name, val, callback) {
+  _send1_1(val, name, callback) {
     var that = this;
+    name = that.channel || name
     //获取本地uuid
     var get_uuid = localStorage.getItem('uuid') || that._getCookie('uuid');
     var set_uuid = that._uuid();
@@ -69,6 +71,7 @@ class Tools {
       }
     };
     if (val && typeof val == "string") {
+      console.log(name, val)
       img1x1.src = location.protocol + "//share.j.cn/js/1x1.gif?ucs=UTF-8&un=statistic_channel." + name + "_logname." + val + "_login.0&timestamp=" + (new Date() - 0) + "&jcnappid=" + jcnappid + "&jcnuserid=" + jcnuserid;
     }
   }
