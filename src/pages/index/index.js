@@ -175,9 +175,9 @@ const vm = new Vue({
     goToUserCenter(index){
       if(index === -1) {
         TOOLS._send1_1('Click_nickname')
-        window.location.href = '../user.html?userId=' + this.works.user.id
+        window.location.href = 'https://balala.j.cn/sharepage/user.html?userId=' + this.works.user.id
       } else{
-        window.location.href = '../user.html?userId=' + this.commentList[index].id
+        window.location.href = 'https://balala.j.cn/sharepage/user.html?userId=' + this.commentList[index].id
       }
     },
     _initScroll(){
@@ -218,6 +218,10 @@ const vm = new Vue({
           console.log(data.bizStatus)
         })
 
+    },
+    enterFullScreen() {
+      this.$refs.BalalaVideo.webkitRequestFullScreen();
+      this.$refs.BalalaVideo.setAttribute('x5-video-player-fullscreen',true)
     }
   },
   created() {
@@ -228,13 +232,13 @@ const vm = new Vue({
     this._getReplyList()
   },
   mounted(){
-    const ua = navigator.userAgent.toLowerCase()
-    if(ua.indexOf('qq') > -1 || ua.indexOf('micromessenger') > -1) {
-      this.$refs.BalalaVideo.addEventListener('x5videoexitfullscreen',()=>{
-        this.$refs.BalalaVideo.pause()
-        this.showPlayIcon = true
-      })
-    }
+    // const ua = navigator.userAgent.toLowerCase()
+    // if(ua.indexOf('qq') > -1 || ua.indexOf('micromessenger') > -1) {
+    //   this.$refs.BalalaVideo.addEventListener('x5videoexitfullscreen',()=>{
+    //     this.$refs.BalalaVideo.pause()
+    //     this.showPlayIcon = true
+    //   })
+    // }
   }
 })
 

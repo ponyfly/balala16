@@ -82,7 +82,7 @@ const vm = new Vue({
       if(e.target.className === 'poster') {
         const worksId = this.itemList[e.target.getAttribute('data-index')].id
         TOOLS._send1_1('Click_video_worksId')
-        window.location.href = '../index.html?id=' + worksId
+        window.location.href = 'https://balala.j.cn/sharepage/index.html?id=' + worksId
       }
     }
   },

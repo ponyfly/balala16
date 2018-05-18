@@ -26,6 +26,7 @@
                             @ended="videoEndHandler">
             </video>
             <img class="play-icon" src="../../imgs/icon-1-1.png" alt="" v-show="showPlayIcon">
+            <img class="full-icon" src="../../imgs/icon-1-11.png" @click.stop="enterFullScreen">
           </div>
           <div class="infos">
             <div class="info info-1" @click="goToUserCenter(-1)">
