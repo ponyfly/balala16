@@ -2,6 +2,7 @@ require('./index.css')
 import Vue from 'vue'
 import BScroll from 'better-scroll'
 import TOOLS from '../../util/util'
+import defaultHeadUrl from '../../imgs/icon-2-1.png'
 
 const vm = new Vue({
   el: "#app",
@@ -19,12 +20,29 @@ const vm = new Vue({
     loadedAll: false,
     commentList: [],
     lastPostY:0,
-    newUser: {}
+    newUser: {
+      nickName: 'defaultName',
+      headUrl: defaultHeadUrl
+    },
+    videoLoading: false
   },
   methods: {
     _initStaticVal() {
+      const ua = navigator.userAgent.toLowerCase();
       this.worksId = TOOLS._GetQueryString('id') || 80569
       this.shareUserId = TOOLS._GetQueryString('shareUserId') || ''
+      this.originHref = location.href
+      this.runningEnv = {
+        'weixin': ua.indexOf('micromessenger') > -1,
+        'qq': ua.indexOf('qq') > -1 && ua.indexOf('micromessenger') === -1,
+        'weibo': ua.indexOf('weibo') > -1,
+        'iphone': ua.indexOf('iphone') > -1,
+        'android': ua.indexOf('android') > -1,
+        'uc':ua.indexOf('ucbrowser') > -1,
+        'baidu': ua.indexOf('baidu') > -1,
+        'pc': window.screen.width > 768,
+        'momo': ua.indexOf('momowebview') > -1,
+      };
     },
     _getWorksShareDetail(){
       const config = {
@@ -64,6 +82,66 @@ const vm = new Vue({
           })
         })
     },
+    _initScroll(){
+      if(!this.scroll) {
+        this.scroll = new BScroll(this.$refs.ScrollContainer,{
+          click: true,
+          bounce: false,
+          pullUpLoad: {
+            threshold: 300,
+          },
+        })
+        this.scroll.on('touchEnd', (pos) => {
+          if(Math.abs(pos.y) - this.lastPostY > 300) {
+            this.lastPostY = Math.abs(pos.y)
+            this._getReplyList()
+          }
+        })
+      } else {
+        this.scroll.refresh()
+      }
+    },
+    _tryAuth(cb){
+      const code = TOOLS._GetQueryString('code')
+      if (code) {
+        if(this.runningEnv.weixin){
+          const config = {
+            url: TOOLS.apis.fetchWechatUserInfo,
+            method: 'POST',
+            data: JSON.stringify({code: code})
+          }
+          TOOLS._ajaxGetData(config)
+            .then(({data}) =>{
+              this.newUser.nickName = data.userInfo.nickName
+              this.newUser.headUrl = data.userInfo.headUrl
+            })
+        }else if(this.runningEnv.qq){
+          const config = {
+            url: TOOLS.apis.fetchQQUserInfo,
+            method: 'POST',
+            data: JSON.stringify({
+              code: code,
+              redirectUri: encodeURIComponent(this.originHref)
+            })
+          }
+          TOOLS._ajaxGetData(config)
+            .then(({data}) =>{
+              this.newUser.nickName = data.userInfo.nickName
+              this.newUser.headUrl = data.userInfo.headUrl
+            })
+        }
+        cb && cb()
+      } else {
+        if (this.runningEnv.qq) {
+          window.location.href = 'https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101404274&redirect_uri=' + encodeURIComponent(this.originHref) +'&scope=get_user_info'
+        } else if (this.runningEnv.weixin) {
+          window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxebd42ca0b55bd02f&redirect_uri='+ encodeURIComponent(this.originHref) +'&response_type=code&scope=snsapi_userinfo&state=test#wechat_redirect';
+        } else {
+          //微博
+          cb && cb()
+        }
+      }
+    },
     controlVideo() {
       if(this.showPlayIcon) {
         this.$refs.BalalaVideo.play()
@@ -100,11 +178,7 @@ const vm = new Vue({
       }
       const newComment = {
         "content": this.commentText,
-        "user": {
-          "id": this.newUser.id,
-          "nickName": "qingsongyan", //不同平台不同用户名 默认default
-          "headUrl": "http://tvax2.sinaimg.cn/crop.5.0.1232.1232.1024/9b9e180dly8fjltddk5rnj20yi0y8dhq.jpg",
-        },
+        "user": this.newUser,
         "replyTime": "刚刚"
       }
       this.commentList.unshift(newComment)
@@ -117,17 +191,13 @@ const vm = new Vue({
         data: JSON.stringify({
           worksId: this.worksId,
           content: this.commentText,
-          userInfo: {
-            headUrl:'https://snapstatic2.j.cn/image/testsnap/180102/1813/9938e781c47b4643.jpg?imageView2/1/w/300/interlace/1/q/80/format/webp',
-            id:this.newUser.id,
-            nickName: 'qingsongyan'
-          }
+          userInfo: this.newUser
         })
       }
       TOOLS._ajaxGetData(config)
         .then(() => {
           this.commentText = ''
-          this.changeHeight(false)
+          this.showActiveClass = false
           this.maskType = 'comment'
         })
       TOOLS._send1_1('Click_Comment_finish')
@@ -142,6 +212,12 @@ const vm = new Vue({
     },
     videoEndHandler() {
       this.showPlayIcon = true
+      this.videoLoading = false
+    },
+    exitHandler() {
+      this.showPlayIcon = true
+      this.videoLoading = false
+      this.$refs.BalalaVideo.pause()
     },
     showLike() {
       this.works.likeCount++
@@ -152,6 +228,7 @@ const vm = new Vue({
     },
     closeMask() {
       this.maskType = ''
+      this.showActiveClass = false
     },
     _getNewestUserId() {
       let newUserId = localStorage.getItem('newUserId') || ''
@@ -180,25 +257,6 @@ const vm = new Vue({
         window.location.href = 'https://balala.j.cn/sharepage/user.html?userId=' + this.commentList[index].id
       }
     },
-    _initScroll(){
-      if(!this.scroll) {
-        this.scroll = new BScroll(this.$refs.ScrollContainer,{
-          click: true,
-          bounce: false,
-          pullUpLoad: {
-            threshold: 300,
-          },
-        })
-        this.scroll.on('touchEnd', (pos) => {
-          if(Math.abs(pos.y) - this.lastPostY > 300) {
-            this.lastPostY = Math.abs(pos.y)
-            this._getReplyList()
-          }
-        })
-      } else {
-        this.scroll.refresh()
-      }
-    },
     attentionOn() {
       const config = {
         method: 'post',
@@ -219,27 +277,27 @@ const vm = new Vue({
         })
 
     },
-    enterFullScreen() {
-      this.$refs.BalalaVideo.webkitRequestFullScreen();
-      this.$refs.BalalaVideo.setAttribute('x5-video-player-fullscreen',true)
+    waitingHandler() {
+     this.videoLoading = true
+    },
+    playingHandler() {
+      this.videoLoading = false
+    }
+  },
+  filters: {
+    formatImg(imgSrc) {
+      return (imgSrc.lastIndexOf('webp') > -1) ? imgSrc.match(/(.*)80\/format\/webp/)[1] + '60' : imgSrc
     }
   },
   created() {
     this._initStaticVal()
-    this._getNewestUserId()
-    if(!this.worksId) return
-    this._getWorksShareDetail()
-    this._getReplyList()
+    this._tryAuth(() => {
+      this._getNewestUserId()
+      this._getWorksShareDetail()
+      this._getReplyList()
+    })
   },
-  mounted(){
-    // const ua = navigator.userAgent.toLowerCase()
-    // if(ua.indexOf('qq') > -1 || ua.indexOf('micromessenger') > -1) {
-    //   this.$refs.BalalaVideo.addEventListener('x5videoexitfullscreen',()=>{
-    //     this.$refs.BalalaVideo.pause()
-    //     this.showPlayIcon = true
-    //   })
-    // }
-  }
+  mounted(){}
 })
 
 

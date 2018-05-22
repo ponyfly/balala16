@@ -1,12 +1,8 @@
 require('./index.css')
 import Vue from 'vue'
 import BScroll from 'better-scroll'
-import VueLazyload from 'vue-lazyload'
 import TOOLS from '../../util/util'
 
-Vue.use(VueLazyload, {
-  preload: 1,
-})
 const vm = new Vue({
   el: "#app",
   data: {
@@ -84,6 +80,11 @@ const vm = new Vue({
         TOOLS._send1_1('Click_video_worksId')
         window.location.href = 'https://balala.j.cn/sharepage/index.html?id=' + worksId
       }
+    },
+  },
+  filters: {
+    formatImg(imgSrc) {
+      return (imgSrc.lastIndexOf('webp') > -1) ? imgSrc.match(/(.*)80\/format\/webp/)[1] + '60' : imgSrc
     }
   },
   created() {

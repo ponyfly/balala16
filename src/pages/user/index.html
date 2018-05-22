@@ -12,7 +12,7 @@
       <div class="userinfo" v-if="Object.keys(personalInfos).length > 0" v-cloak>
         <div class="main-1">
           <div class="t clearfix">
-            <img class="avator" :src="personalInfos.user.headUrl" alt="">
+            <img class="avator" :src="personalInfos.user.headUrl | formatImg" alt="">
             <div class="follow" @click="linkToAppStore">+ 关注</div>
           </div>
           <div class="b clearfix">
@@ -45,7 +45,7 @@
         <div class="videos-container" v-if="itemList.length > 0" v-cloak>
           <ul class="videos-contents clearfix" @click.capture="linkToIndex">
             <li class="video-item" v-for="(item, index) in itemList" :key="item.id">
-              <img class="poster" v-lazy="item.worksPic.url" :data-index="index">
+              <img class="poster" :src="item.worksPic.url | formatImg" :data-index="index">
               <div class="video-infos">
                 <div class="plays">
                   <img src="../../imgs/icon-2-5.png" alt="">

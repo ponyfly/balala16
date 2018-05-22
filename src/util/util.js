@@ -7,7 +7,9 @@ let apis = {
   sendReply: urlOrigin + '/api/sendReply',
   personalNewsList: urlOrigin + '/api/personalNewsList',
   getNewestUserId: urlOrigin + '/api/getNewestUserId',
-  attentionOn: urlOrigin + '/api/attentionOn'
+  attentionOn: urlOrigin + '/api/attentionOn',
+  fetchWechatUserInfo: urlOrigin + '/api/fetchWechatUserInfo',
+  fetchQQUserInfo: urlOrigin + '/api/fetchQQUserInfo',
 }
 class Tools {
 

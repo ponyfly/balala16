@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=750, user-scalable=no">
-  <title>佢系铁头功的视频</title>
+  <title>我录了一段有点特别的视频，点开看看？</title>
 </head>
 <body>
 <div id="app">
@@ -18,19 +18,22 @@
                             :src="works.movie.waterMarkUrl || works.movie.url"
                             :poster="works.worksPic.url"
                             x5-video-player-type="h5"
-                            ref="BalalaVideo"
-                            preload
+                            x5-playsinline="true"
                             playsinline
                             webkit-playsinline="true"
-                            x5-playsinline="true"
-                            @ended="videoEndHandler">
+                            ref="BalalaVideo"
+                            preload
+                            @ended="videoEndHandler"
+                            @waiting="waitingHandler"
+                            @playing="playingHandler"
+                            @x5videoexitfullscreen="exitHandler">
             </video>
-            <img class="play-icon" src="../../imgs/icon-1-1.png" alt="" v-show="showPlayIcon">
-            <img class="full-icon" src="../../imgs/icon-1-11.png" @click.stop="enterFullScreen">
+            <img class="play-icon" src="../../imgs/icon-1-1.png" v-cloak v-show="showPlayIcon">
+            <img class="loading" src="../../imgs/loading.gif" v-cloak v-show="videoLoading">
           </div>
           <div class="infos">
             <div class="info info-1" @click="goToUserCenter(-1)">
-              <img class="avator" :src="works.user.headUrl">
+              <img class="avator" :src="works.user.headUrl | formatImg">
               <span v-cloak>{{works.user.nickName}}</span>
             </div>
             <div class="info info-3">
@@ -58,8 +61,8 @@
         <div class="publish"
              v-show="showActiveClass"
              @click="publishComment">发表</div>
-        <div class="star">
-          <img src="../../imgs/icon-1-9.png" v-if="!isLike" v-cloak @click.once="showLike">
+        <div class="star" @click.once="showLike">
+          <img src="../../imgs/icon-1-9.png" v-if="!isLike" v-cloak>
           <img src="../../imgs/icon-1-10.png" v-cloak v-else>
           <span v-cloak>{{works.likeCount}}</span>
         </div>
@@ -81,7 +84,7 @@
               <div class="content-b" v-cloak>{{comment.content}}</div>
             </div>
             <div class="avator">
-              <img :src="comment.user.headUrl" @click="goToUserCenter(index)">
+              <img :src="comment.user.headUrl | formatImg" @click="goToUserCenter(index)">
             </div>
           </li>
         </ul>
