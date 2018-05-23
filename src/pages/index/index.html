@@ -13,22 +13,25 @@
       <div class="creater" v-if="Object.keys(works).length > 0">
         <img class="creater-bg" src="../../imgs/icon-1-7.jpg">
         <div class="creater-c">
-          <div class="video-a" @click="controlVideo">
+          <div class="video-a">
             <video class="video"
-                            :src="works.movie.waterMarkUrl || works.movie.url"
-                            :poster="works.worksPic.url"
-                            x5-video-player-type="h5"
-                            x5-playsinline="true"
-                            playsinline
-                            webkit-playsinline="true"
-                            ref="BalalaVideo"
-                            preload
-                            @ended="videoEndHandler"
-                            @waiting="waitingHandler"
-                            @playing="playingHandler"
-                            @x5videoexitfullscreen="exitHandler">
+                   :class="{'full-screen': isFullScreen}"
+                   :src="works.movie.waterMarkUrl || works.movie.url"
+                   :poster="works.worksPic.url"
+                   x5-video-player-type="h5"
+                   x5-playsinline="true"
+                   playsinline
+                   webkit-playsinline="true"
+                   ref="BalalaVideo"
+                   preload
+                   @ended="videoEndHandler"
+                   @waiting="waitingHandler"
+                   @playing="playingHandler"
+                   @x5videoexitfullscreen="exitHandler"
+                   @x5videoenterfullscreen="enterHandler"
+                   @click="controlVideo">
             </video>
-            <img class="play-icon" src="../../imgs/icon-1-1.png" v-cloak v-show="showPlayIcon">
+            <img class="play-icon" src="../../imgs/icon-1-1.png" v-cloak v-show="showPlayIcon" @click="controlVideo">
             <img class="loading" src="../../imgs/loading.gif" v-cloak v-show="videoLoading">
           </div>
           <div class="infos">

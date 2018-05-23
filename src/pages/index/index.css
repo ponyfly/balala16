@@ -10,10 +10,10 @@ img{ border:none;}
 #app .creater .creater-bg {display: block; width:100%;}
 #app .creater .creater-c { position: absolute; top:0; left:0; width:100%; height:100%}
 #app .creater .creater-c .video-a{ height:727px; position: relative;}
-#app .creater .creater-c .video-a .play-icon{ position: absolute; top:50%; left:50%;z-index: 999; margin:-52px 0 0 -51px;width:102px; height:104px;}
+#app .creater .creater-c .video-a .play-icon{ position: absolute; top:0; right:0; bottom: 0; left:0;z-index: 999; margin:auto;width:102px; height:104px;}
 #app .creater .creater-c .video-a .loading{ position: absolute; top:50%; left:50%;z-index: 999; margin:-25px 0 0 -25px;width:50px; height:50px;}
 #app .creater .creater-c .video-a .full-icon{ position: absolute; bottom:16px; right:200px;z-index: 999; width:48px; height:48px;}
-#app .creater .creater-c .video-a .video{ position: absolute; left:50%; bottom:0;transform:translateX(-50%);margin-top: 23px; height:704px}
+#app .creater .creater-c .video-a .video{ position: absolute;left: 0;bottom: 0;width: 400px;top: 0;right: 0;margin: auto;}
 #app .creater .creater-c .infos{width:100%;height:96px; padding:0 40px; color: #fff;}
 #app .creater .creater-c .infos .info { height:100%;line-height: 96px}
 #app .creater .creater-c .infos .info:first-of-type{ float: left;color: #fff; font-size: 26px}
@@ -23,6 +23,7 @@ img{ border:none;}
 #app .creater .creater-c .infos .info-1 .avator{ width:44px;height:44px;border-radius: 22px}
 #app .creater .creater-c .infos .info span{vertical-align: middle; }
 .info:after {content: "";display: inline-block;height:100%;vertical-align: middle; }
+#app .creater .creater-c .video-a .full-screen{ width:100%;}
 
 /*填写评论、点赞区域*/
 #app .operation { padding:25px 40px; position: relative;}

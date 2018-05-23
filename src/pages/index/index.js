@@ -2,7 +2,7 @@ require('./index.css')
 import Vue from 'vue'
 import BScroll from 'better-scroll'
 import TOOLS from '../../util/util'
-import defaultHeadUrl from '../../imgs/icon-2-1.png'
+import defaultHeadUrl from '../../imgs/default-avator.png'
 
 const vm = new Vue({
   el: "#app",
@@ -24,7 +24,8 @@ const vm = new Vue({
       nickName: 'defaultName',
       headUrl: defaultHeadUrl
     },
-    videoLoading: false
+    videoLoading: false,
+    isFullScreen: false
   },
   methods: {
     _initStaticVal() {
@@ -217,7 +218,11 @@ const vm = new Vue({
     exitHandler() {
       this.showPlayIcon = true
       this.videoLoading = false
+      this.isFullScreen = false
       this.$refs.BalalaVideo.pause()
+    },
+    enterHandler() {
+      this.isFullScreen = true
     },
     showLike() {
       this.works.likeCount++
