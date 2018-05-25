@@ -239,6 +239,7 @@ const vm = new Vue({
       let newUserId = localStorage.getItem('newUserId') || ''
       if(newUserId) {
         this.newUser.id = newUserId
+        this.newUser.nickName = '微博用户' + newUserId
         console.log('storage: ' + newUserId)
       } else {
         const config = {
@@ -249,6 +250,7 @@ const vm = new Vue({
         TOOLS._ajaxGetData(config)
           .then(({data}) => {
             this.newUser.id = data.userId
+            this.newUser.nickName = '微博用户' + newUserId
             localStorage.setItem('newUserId', data.userId)
             console.log('ajax:' + data.userId)
           })
@@ -259,6 +261,7 @@ const vm = new Vue({
         TOOLS._send1_1('Click_nickname')
         window.location.href = 'https://balala.j.cn/sharepage/user.html?userId=' + this.works.user.id
       } else{
+        if (this.commentList[index].sourceFrom !==0) return
         window.location.href = 'https://balala.j.cn/sharepage/user.html?userId=' + this.commentList[index].id
       }
     },
@@ -269,11 +272,7 @@ const vm = new Vue({
         data: JSON.stringify({
           "objId": this.works.id,
           "type": 0,
-          "userInfo": {
-            "id": this.newUser.id,
-            "nickName": "qingsongyan", //不同平台不同用户名 默认default
-            "headUrl": "http://tvax2.sinaimg.cn/crop.5.0.1232.1232.1024/9b9e180dly8fjltddk5rnj20yi0y8dhq.jpg",
-          },
+          "userInfo": this.newUser,
         })
       }
       TOOLS._ajaxGetData(config)
