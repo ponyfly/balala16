@@ -261,8 +261,8 @@ const vm = new Vue({
         TOOLS._send1_1('Click_nickname')
         window.location.href = 'https://balala.j.cn/sharepage/user.html?userId=' + this.works.user.id
       } else{
-        if (this.commentList[index].sourceFrom !==0) return
-        window.location.href = 'https://balala.j.cn/sharepage/user.html?userId=' + this.commentList[index].id
+        if (this.commentList[index].sourceFrom === 1) return
+        window.location.href = 'https://balala.j.cn/sharepage/user.html?userId=' + this.commentList[index].user.id
       }
     },
     attentionOn() {
@@ -286,6 +286,13 @@ const vm = new Vue({
     },
     playingHandler() {
       this.videoLoading = false
+    },
+    blurInput(e){
+      if (e.target.dataset.a === '评论') return
+      if (this.showActiveClass) {
+        this.$refs.textArea.blur()
+        this.showActiveClass = false
+      }
     }
   },
   filters: {

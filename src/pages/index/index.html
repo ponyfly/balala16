@@ -7,17 +7,17 @@
 </head>
 <body>
 <div id="app">
-  <div class="page-container" ref="ScrollContainer">
+  <div class="page-container" ref="ScrollContainer" @click="blurInput">
     <div class="page-content">
       <!--视频创建者的所有信息-->
-      <div class="creater" :class="{'full-screen-creater' : isFullScreen}" v-if="true">
+      <div class="creater" :class="{'full-screen-creater' : isFullScreen}" v-if="Object.keys(works).length > 0">
         <img class="creater-bg" src="../../imgs/icon-1-7.jpg">
         <div class="creater-c">
           <div class="video-a" :class="{'full-screen-videoa' : isFullScreen}">
             <video class="video"
                    :class="{'full-screen': isFullScreen}"
-                   src="https://weappstatic1.j.cn/video/joke/180323/1016/39517e082e4011e8.mp4"
-                   poster="https://snapstatic1.j.cn/image/testsnap/180426/1551/8a9b5d42e0f94e58.jpg"
+                   :src="works.movie.waterMarkUrl || works.movie.url"
+                   :poster="works.worksPic.url"
                    x5-video-player-type="h5"
                    x5-playsinline="true"
                    playsinline
@@ -52,14 +52,16 @@
       </div>
 
       <!--填写评论、点赞区域-->
-      <div class="operation clearfix" v-if="Object.keys(works).length > 0" v-cloak>
+      <div class="operation clearfix" :class="{'full-screen-operation': isFullScreen}" v-if="Object.keys(works).length > 0" v-cloak>
         <textarea
             class="input-radius"
             maxlength="120"
             placeholder="说说你的看法"
             v-model="commentText"
             :class="{active: showActiveClass}"
-            @focus="changeHeight(true)">
+            @focus="changeHeight(true)"
+            ref="textArea"
+            data-a="评论">
         </textarea>
       <div class="publish"
            v-show="showActiveClass"
@@ -73,7 +75,7 @@
     </div>
 
       <!--评论列表区域-->
-      <div class="comments" v-if="commentList.length > 0">
+      <div class="comments" :class="{'full-screen-comments': isFullScreen}" v-if="commentList.length > 0">
         <ul>
           <li class="comment" v-for="(comment, index) in commentList" :key="comment.user.id">
             <div class="content-r">

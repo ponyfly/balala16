@@ -119,7 +119,7 @@ module.exports = merge(base, {
       }
     }),
     new webpack.DllReferencePlugin({
-      manifest: utils.absolutePath('dist/dll/vendor.manifest.json')
+      manifest: require(utils.absolutePath('dist/dll/vendor.manifest.json'))
     }),
     new ProgressBarPlugin({
       format: '  build [:bar] ' + chalk.green.bold(':percent') + ' (:elapsed seconds)'
