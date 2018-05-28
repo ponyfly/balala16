@@ -7,7 +7,7 @@
 </head>
 <body>
 <div id="app">
-  <div class="page-container" ref="ScrollContainer" @click="blurInput">
+  <div class="page-container" ref="ScrollContainer" @touchstart="blurInput" @touchmove="blurInput($event,'move')">
     <div class="page-content">
       <!--视频创建者的所有信息-->
       <div class="creater" :class="{'full-screen-creater' : isFullScreen}" v-if="Object.keys(works).length > 0">

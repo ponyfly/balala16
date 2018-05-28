@@ -165,6 +165,7 @@ const vm = new Vue({
       this.showFixBottom = false
     },
     changeHeight(isActive) {
+      if (this.showActiveClass === true) return
       TOOLS._send1_1('Click_Comment')
       this.showActiveClass = isActive
     },
@@ -287,8 +288,14 @@ const vm = new Vue({
     playingHandler() {
       this.videoLoading = false
     },
-    blurInput(e){
-      if (e.target.dataset.a === '评论') return
+    blurInput(e, opt){
+      if (e.target.dataset.a === '评论') {
+        if (opt === 'move') {
+          this.$refs.textArea.blur()
+          this.showActiveClass = false
+        }
+        return
+      }
       if (this.showActiveClass) {
         this.$refs.textArea.blur()
         this.showActiveClass = false
@@ -308,6 +315,7 @@ const vm = new Vue({
       this._getReplyList()
     })
   },
+  watch: {},
   mounted(){}
 })
 
