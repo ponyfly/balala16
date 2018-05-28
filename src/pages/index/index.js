@@ -290,10 +290,6 @@ const vm = new Vue({
     },
     blurInput(e, opt){
       if (e.target.dataset.a === '评论') {
-        if (opt === 'move') {
-          this.$refs.textArea.blur()
-          this.showActiveClass = false
-        }
         return
       }
       if (this.showActiveClass) {
@@ -309,11 +305,12 @@ const vm = new Vue({
   },
   created() {
     this._initStaticVal()
-    this._tryAuth(() => {
-      this._getNewestUserId()
-      this._getWorksShareDetail()
-      this._getReplyList()
-    })
+    this._initScroll()
+    // this._tryAuth(() => {
+    //   this._getNewestUserId()
+    //   this._getWorksShareDetail()
+    //   this._getReplyList()
+    // })
   },
   watch: {},
   mounted(){}
