@@ -1,6 +1,5 @@
 require('./index.css')
 import Vue from 'vue'
-import BScroll from 'better-scroll'
 import TOOLS from '../../util/util'
 import defaultHeadUrl from '../../imgs/default-avator.png'
 
@@ -25,7 +24,12 @@ const vm = new Vue({
       headUrl: defaultHeadUrl
     },
     videoLoading: false,
-    isFullScreen: false
+    isFullScreen: false,
+    loadMore: {
+      startY: 0,
+      endY: 0
+    },
+    runningEnv: {}
   },
   methods: {
     _initStaticVal() {
@@ -78,29 +82,7 @@ const vm = new Vue({
           this.commentList = this.commentList.concat(data.list)
           this.nextPageRecord = data.nextPageRecord
           this.loadedAll = !(data.nextPageRecord).trim()
-          this.$nextTick(() => {
-            this._initScroll()
-          })
         })
-    },
-    _initScroll(){
-      if(!this.scroll) {
-        this.scroll = new BScroll(this.$refs.ScrollContainer,{
-          click: true,
-          bounce: false,
-          pullUpLoad: {
-            threshold: 300,
-          },
-        })
-        this.scroll.on('touchEnd', (pos) => {
-          if(Math.abs(pos.y) - this.lastPostY > 300) {
-            this.lastPostY = Math.abs(pos.y)
-            this._getReplyList()
-          }
-        })
-      } else {
-        this.scroll.refresh()
-      }
     },
     _tryAuth(cb){
       const code = TOOLS._GetQueryString('code')
@@ -164,10 +146,9 @@ const vm = new Vue({
     closeFixBottom() {
       this.showFixBottom = false
     },
-    changeHeight(isActive) {
-      if (this.showActiveClass === true) return
+    changeHeight() {
+      this.showActiveClass = true
       TOOLS._send1_1('Click_Comment')
-      this.showActiveClass = isActive
     },
     publishComment() {
       const commentLength = this.commentText.trim().length
@@ -184,9 +165,6 @@ const vm = new Vue({
         "replyTime": "刚刚"
       }
       this.commentList.unshift(newComment)
-      this.$nextTick(()=> {
-        this.scroll.refresh()
-      })
       const config = {
         method: 'post',
         url: TOOLS.apis.sendReply,
@@ -226,6 +204,7 @@ const vm = new Vue({
       this.isFullScreen = true
     },
     showLike() {
+      console.log('like')
       this.works.likeCount++
       this.isLike = true
       this.maskType = 'like'
@@ -288,16 +267,53 @@ const vm = new Vue({
     playingHandler() {
       this.videoLoading = false
     },
-    blurInput(e, opt){
-      if (e.target.dataset.a === '评论') {
-        return
+    touchStart(e){
+      if (!/评论|发表|喜欢/.test(e.target.dataset.a)){
+        if (this.showActiveClass) {
+          this.$refs.textArea.blur()
+        }
       }
-      if (this.showActiveClass) {
-        this.$refs.textArea.blur()
-        this.showActiveClass = false
+      this.startY = e.targetTouches[0].pageY
+    },
+    touchEnd(e){
+      this.endY = e.changedTouches[0].pageY
+      if (this.endY - this.startY < -300) {
+        this._getReplyList()
       }
-    }
-  },
+    },
+    blurHandler() {
+      this.showActiveClass = false
+    },
+    // postCommonStats({id = 0, jcntarget = '', jcnapp = ''}) {
+    //   const url = 'https://snap.j.cn/api/commonStats'
+    //   const {jcnappid, jcnuserid} = Tool._getJcn()
+    //   const data = {
+    //     'itemId': id + '',
+    //     'action': 'h5detail',
+    //     'target': jcntarget || '',
+    //     'typeId': themeId + '',
+    //     'app': jcnapp || '',
+    //     'from': 'h5',
+    //     'clientEnv': {
+    //       'jcnappid': jcnappid + '',
+    //       'jcnuserid': jcnuserid + '',
+    //       'latitude': '0',
+    //       'longitude': '0',
+    //       'net': '',
+    //       'v': '0'
+    //     },
+    //     'userid': userId + ''
+    //   }
+    //   $.ajax({
+    //     url: url,
+    //     type: 'POST',
+    //     data: JSON.stringify(data),
+    //   })
+    //     .then(({statusCode}) => console.log)
+    //     .fail(console.log)
+    // }
+
+},
   filters: {
     formatImg(imgSrc) {
       return (imgSrc.lastIndexOf('webp') > -1) ? imgSrc.match(/(.*)80\/format\/webp/)[1] + '60' : imgSrc
@@ -305,12 +321,11 @@ const vm = new Vue({
   },
   created() {
     this._initStaticVal()
-    this._initScroll()
-    // this._tryAuth(() => {
-    //   this._getNewestUserId()
-    //   this._getWorksShareDetail()
-    //   this._getReplyList()
-    // })
+    this._tryAuth(() => {
+      this._getNewestUserId()
+      this._getWorksShareDetail()
+      this._getReplyList()
+    })
   },
   watch: {},
   mounted(){}
