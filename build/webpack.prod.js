@@ -34,8 +34,8 @@ module.exports = merge(base, {
   mode: 'production',
   output: {
     path: utils.absolutePath('dist'),
-    filename: "js/[name].js",
-    chunkFilename: "js/[name].js",
+    filename: "js/[name].[chunkhash:6].js",
+    chunkFilename: "js/[name].[chunkhash:6].js",
     publicPath: "https://snapstatic.j.cn/sharepage/"
   },
   module: {
@@ -94,7 +94,7 @@ module.exports = merge(base, {
       append: false
     }),
     new ExtractPlugin({
-      filename: "css/[name].css"
+      filename: "css/[name].[hash:6].css"
     }),
     new HappyPack({
       id: 'happy-babel-js',

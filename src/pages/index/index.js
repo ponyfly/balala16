@@ -34,7 +34,7 @@ const vm = new Vue({
   methods: {
     _initStaticVal() {
       const ua = navigator.userAgent.toLowerCase();
-      this.worksId = TOOLS._GetQueryString('id') || 80569
+      this.worksId = TOOLS._GetQueryString('id') || 504533
       this.shareUserId = TOOLS._GetQueryString('shareUserId') || ''
       this.originHref = location.href
       this.runningEnv = {
