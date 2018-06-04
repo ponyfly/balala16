@@ -5,7 +5,7 @@ module.exports = {
   resolve: {
     extensions: ['.js'],
     alias: {
-      vue: 'vue/dist/vue.js',
+      vue: 'vue/dist/vue.min.js',
     }
   },
   module: {
