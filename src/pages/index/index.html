@@ -102,6 +102,10 @@
     </div>
   </div>
   <!--广告区域-->
+  <div class="ad" v-if="showFixBottom">
+    <div class="download" @click="linkToAppStore"></div>
+    <div class="close" @click="closeFixBottom"></div>
+  </div>
 
   <!--评论成功，点赞成功-->
   <div v-if="maskType" class="mask" v-cloak @touchmove.prevent>
