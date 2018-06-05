@@ -238,6 +238,7 @@ const apis = {
   attentionOn: urlOrigin + '/api/attentionOn',
   fetchWechatUserInfo: urlOrigin + '/api/fetchWechatUserInfo',
   fetchQQUserInfo: urlOrigin + '/api/fetchQQUserInfo',
+  commonStats: urlOrigin + '/api/commonStats',
 }
 const channel = debug ? 'balalatest' : 'balala'
 TOOLS.apis = apis

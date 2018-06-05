@@ -36,7 +36,7 @@ module.exports = merge(base, {
     path: utils.absolutePath('dist'),
     filename: "js/[name].[chunkhash:6].js",
     chunkFilename: "js/[name].[chunkhash:6].js",
-    publicPath: "/"
+    publicPath: "https://snapstatic.j.cn/sharepage/"
   },
   module: {
     rules: [

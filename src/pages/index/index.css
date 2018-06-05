@@ -26,7 +26,7 @@ img{ border:none;}
 /*全屏播放样式*/
 #app .creater.full-screen-creater{overflow:visible;}
 #app .creater .creater-c .video-a.full-screen-videoa{ height:100vh;}
-#app .creater .creater-c .video-a .full-screen{ width:100%;}
+#app .creater .creater-c .video-a .full-screen{ width:100%; height:auto;}
 #app .operation.full-screen-operation{display: none}
 #app .comments.full-screen-comments{display: none}
 

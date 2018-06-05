@@ -20,7 +20,7 @@
             <video class="video"
                    :class="{'full-screen': isFullScreen}"
                    :src="works.movie.waterMarkUrl || works.movie.url"
-                   :poster="works.worksPic.url"
+                   :poster="works.worksPic.url | formatImg"
                    x5-video-player-type="h5"
                    x5-playsinline="true"
                    playsinline
@@ -72,7 +72,7 @@
            @click="publishComment"
            data-a="发表">发表</div>
       <div class="star" @click.once="showLike" data-a="喜欢">
-        <img src="../../imgs/icon-1-9.png" v-if="!isLike" v-cloak data-a="喜欢">
+        <img src="../../imgs/icon-1-9.png" v-if="!works.hasAttention" v-cloak data-a="喜欢">
         <img src="../../imgs/icon-1-10.png" v-cloak v-else data-a="喜欢">
         <span v-cloak data-a="喜欢">{{works.likeCount}}</span>
       </div>
