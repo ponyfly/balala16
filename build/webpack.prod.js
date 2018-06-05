@@ -8,9 +8,9 @@ const ExtractPlugin = require('extract-text-webpack-plugin')
 const CleanPlugin = require('clean-webpack-plugin')
 const PurifyCSSPlugin = require('purifycss-webpack')
 const WebpackParallelUglifyPlugin = require('webpack-parallel-uglify-plugin')
-const ProgressBarPlugin = require('progress-bar-webpack-plugin')
-const chalk = require('chalk')
-const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
+// const ProgressBarPlugin = require('progress-bar-webpack-plugin')
+// const chalk = require('chalk')
+// const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
 const merge = require('webpack-merge')
 
 const base = require('./webpack.base')
@@ -24,7 +24,7 @@ function getEntryHtml() {
     entryHtmls.push(new HtmlPlugin({
       template: entries[name],
       filename:`${name}.html`,
-      chunks: [`runtime~${name}`, name, 'vendors', 'utils']
+      chunks: [`manifest`,  'vendors', name]
     }))
   })
   return entryHtmls
@@ -69,30 +69,26 @@ module.exports = merge(base, {
           test:  /[\\/]node_modules[\\/]/,
           name: 'vendors',
           chunks: 'initial'
-        },
-        utils: {
-          test: /[\\/]util[\\/]/,
-          name: 'utils',
-          chunks: 'initial',
-          minSize: 0
         }
       }
     },
-    runtimeChunk: true
+    runtimeChunk: {
+      name:'manifest'
+    }
   },
   plugins: [
     new CleanPlugin(['dist'],{
       root: utils.absolutePath(),
-      exclude: ['dll']
+      // exclude: ['dll']
     }),
     new webpack.HashedModuleIdsPlugin(),
     ...getEntryHtml(),
-    new HtmlWebpackIncludeAssetsPlugin({
-      assets: [
-        'dll/vendor.dll.js'
-      ],
-      append: false
-    }),
+    // new HtmlWebpackIncludeAssetsPlugin({
+    //   assets: [
+    //     'dll/vendor.dll.js'
+    //   ],
+    //   append: false
+    // }),
     new ExtractPlugin({
       filename: "css/[name].[hash:6].css"
     }),
@@ -118,11 +114,11 @@ module.exports = merge(base, {
         }
       }
     }),
-    new webpack.DllReferencePlugin({
-      manifest: utils.absolutePath('dist/dll/vendor.manifest.json')
-    }),
-    new ProgressBarPlugin({
-      format: '  build [:bar] ' + chalk.green.bold(':percent') + ' (:elapsed seconds)'
-    })
+    // new webpack.DllReferencePlugin({
+    //   manifest: require(utils.absolutePath('dist/dll/vendor.manifest.json'))
+    // }),
+    // new ProgressBarPlugin({
+    //   format: '  build [:bar] ' + chalk.green.bold(':percent') + ' (:elapsed seconds)'
+    // })
   ]
 })

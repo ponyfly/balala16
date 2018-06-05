@@ -1,6 +1,6 @@
 require('./index.css')
 import Vue from 'vue'
-import BScroll from 'better-scroll'
+import wx from 'weixin-js-sdk'
 import TOOLS from '../../util/util'
 import defaultHeadUrl from '../../imgs/default-avator.png'
 
@@ -25,13 +25,22 @@ const vm = new Vue({
       headUrl: defaultHeadUrl
     },
     videoLoading: false,
-    isFullScreen: false
+    isFullScreen: false,
+    loadMore: {
+      startY: 0,
+      endY: 0
+    },
+    runningEnv: {},
+    isFirstClickVideo: true
   },
   methods: {
+    /**
+     * 初始化静态数据
+     * @private
+     */
     _initStaticVal() {
       const ua = navigator.userAgent.toLowerCase();
-      this.worksId = TOOLS._GetQueryString('id') || 80569
-      this.shareUserId = TOOLS._GetQueryString('shareUserId') || ''
+      this.worksId = TOOLS._GetQueryString('id') || 504533
       this.originHref = location.href
       this.runningEnv = {
         'weixin': ua.indexOf('micromessenger') > -1,
@@ -45,13 +54,17 @@ const vm = new Vue({
         'momo': ua.indexOf('momowebview') > -1,
       };
     },
+    /**
+     * 获取作品信息
+     * @private
+     */
     _getWorksShareDetail(){
       const config = {
         method: 'post',
         url: TOOLS.apis.worksShareDetail,
         data: JSON.stringify({
+          cu: this.newUser.id,
           worksId: this.worksId,
-          shareUserId: this.shareUserId
         })
       }
       TOOLS._ajaxGetData(config)
@@ -59,6 +72,10 @@ const vm = new Vue({
           this.works = data.works
         })
     },
+    /**
+     * 获取评论列表
+     * @private
+     */
     _getReplyList() {
       if(this.loadedAll){
         console.log('加载完了...')
@@ -68,6 +85,7 @@ const vm = new Vue({
         method: 'post',
         url: TOOLS.apis.replyList,
         data: JSON.stringify({
+          cu: this.newUser.id,
           worksId: this.worksId,
           pageSize: 20,
           pageRecord: this.nextPageRecord || ''
@@ -78,30 +96,13 @@ const vm = new Vue({
           this.commentList = this.commentList.concat(data.list)
           this.nextPageRecord = data.nextPageRecord
           this.loadedAll = !(data.nextPageRecord).trim()
-          this.$nextTick(() => {
-            this._initScroll()
-          })
         })
     },
-    _initScroll(){
-      if(!this.scroll) {
-        this.scroll = new BScroll(this.$refs.ScrollContainer,{
-          click: true,
-          bounce: false,
-          pullUpLoad: {
-            threshold: 300,
-          },
-        })
-        this.scroll.on('touchEnd', (pos) => {
-          if(Math.abs(pos.y) - this.lastPostY > 300) {
-            this.lastPostY = Math.abs(pos.y)
-            this._getReplyList()
-          }
-        })
-      } else {
-        this.scroll.refresh()
-      }
-    },
+    /**
+     * 获取微信、QQ平台认证
+     * @param cb
+     * @private
+     */
     _tryAuth(cb){
       const code = TOOLS._GetQueryString('code')
       if (code) {
@@ -131,6 +132,7 @@ const vm = new Vue({
               this.newUser.headUrl = data.userInfo.headUrl
             })
         }
+        this._pushHistory()
         cb && cb()
       } else {
         if (this.runningEnv.qq) {
@@ -143,14 +145,25 @@ const vm = new Vue({
         }
       }
     },
+    /**
+     * 视频播放控制
+     */
     controlVideo() {
       if(this.showPlayIcon) {
+        if (this.isFirstClickVideo) {
+          this.postCommonStats()
+          this.isFirstClickVideo = false
+        }
         this.$refs.BalalaVideo.play()
       } else {
         this.$refs.BalalaVideo.pause()
       }
       this.showPlayIcon = !this.showPlayIcon
     },
+    /**
+     * 跳转到应用商店
+     * @param opt 点击位置
+     */
     linkToAppStore(opt) {
       if(opt === 'get') {
         TOOLS._send1_1('Download_get')
@@ -161,13 +174,22 @@ const vm = new Vue({
       }
       window.location.href = 'http://a.app.qq.com/o/simple.jsp?pkgname=cn.j.tock&ckey=CK1385982821822'
     },
+    /**
+     * 关闭底部广告
+     */
     closeFixBottom() {
       this.showFixBottom = false
     },
-    changeHeight(isActive) {
+    /**
+     * 控制输入框高度变化
+     */
+    changeHeight() {
+      this.showActiveClass = true
       TOOLS._send1_1('Click_Comment')
-      this.showActiveClass = isActive
     },
+    /**
+     * 发表评论
+     */
     publishComment() {
       const commentLength = this.commentText.trim().length
       if(commentLength === 0) {
@@ -183,9 +205,6 @@ const vm = new Vue({
         "replyTime": "刚刚"
       }
       this.commentList.unshift(newComment)
-      this.$nextTick(()=> {
-        this.scroll.refresh()
-      })
       const config = {
         method: 'post',
         url: TOOLS.apis.sendReply,
@@ -203,6 +222,10 @@ const vm = new Vue({
         })
       TOOLS._send1_1('Click_Comment_finish')
     },
+    /**
+     * 控制error弹框
+     * @param text
+     */
     controlTipPanel(text) {
       this.tipContent = text
       this.showTipPanel = true
@@ -211,34 +234,53 @@ const vm = new Vue({
         this.showTipPanel = false
       },1000)
     },
+    /**
+     * 视频结束事件
+     */
     videoEndHandler() {
       this.showPlayIcon = true
       this.videoLoading = false
     },
+    /**
+     * 退出全屏事件
+     */
     exitHandler() {
       this.showPlayIcon = true
       this.videoLoading = false
       this.isFullScreen = false
       this.$refs.BalalaVideo.pause()
     },
+    /**
+     * 进入全屏事件
+     */
     enterHandler() {
       this.isFullScreen = true
     },
+    /**
+     * 喜欢该作品
+     */
     showLike() {
-      this.works.likeCount++
-      this.isLike = true
-      this.maskType = 'like'
+      console.log('like')
+      if (this.works.hasAttention) return
       TOOLS._send1_1('Click_Like')
       this.attentionOn()
     },
+    /**
+     * 关闭遮罩
+     */
     closeMask() {
       this.maskType = ''
       this.showActiveClass = false
     },
+    /**
+     * 生成用户id
+     * @private
+     */
     _getNewestUserId() {
       let newUserId = localStorage.getItem('newUserId') || ''
       if(newUserId) {
         this.newUser.id = newUserId
+        this.newUser.nickName = '微博用户' + newUserId
         console.log('storage: ' + newUserId)
       } else {
         const config = {
@@ -249,19 +291,28 @@ const vm = new Vue({
         TOOLS._ajaxGetData(config)
           .then(({data}) => {
             this.newUser.id = data.userId
+            this.newUser.nickName = '微博用户' + newUserId
             localStorage.setItem('newUserId', data.userId)
             console.log('ajax:' + data.userId)
           })
       }
     },
+    /**
+     * 跳转到用户中心页面
+     * @param index
+     */
     goToUserCenter(index){
       if(index === -1) {
         TOOLS._send1_1('Click_nickname')
         window.location.href = 'https://balala.j.cn/sharepage/user.html?userId=' + this.works.user.id
       } else{
-        window.location.href = 'https://balala.j.cn/sharepage/user.html?userId=' + this.commentList[index].id
+        if (this.commentList[index].user.sourceFrom === 1) return
+        window.location.href = 'https://balala.j.cn/sharepage/user.html?userId=' + this.commentList[index].user.id
       }
     },
+    /**
+     * 喜欢（关注）该作品
+     */
     attentionOn() {
       const config = {
         method: 'post',
@@ -269,24 +320,101 @@ const vm = new Vue({
         data: JSON.stringify({
           "objId": this.works.id,
           "type": 0,
-          "userInfo": {
-            "id": this.newUser.id,
-            "nickName": "qingsongyan", //不同平台不同用户名 默认default
-            "headUrl": "http://tvax2.sinaimg.cn/crop.5.0.1232.1232.1024/9b9e180dly8fjltddk5rnj20yi0y8dhq.jpg",
-          },
+          "userInfo": this.newUser,
         })
       }
       TOOLS._ajaxGetData(config)
         .then(({data}) => {
           console.log(data.bizStatus)
+          this.works.likeCount++
+          this.works.hasAttention = true
+          this.maskType = 'like'
         })
 
     },
+    /**
+     * 播放等待中事件
+     */
     waitingHandler() {
      this.videoLoading = true
     },
+    /**
+     * 播放中事件
+     */
     playingHandler() {
       this.videoLoading = false
+    },
+    /**
+     * 手指按下事件
+     * @param e
+     */
+    touchStart(e){
+      if (!/评论|发表|喜欢/.test(e.target.dataset.a)){
+        if (this.showActiveClass) {
+          this.$refs.textArea.blur()
+        }
+      }
+      this.startY = e.targetTouches[0].pageY
+    },
+    /**
+     * 手指离开事件
+     * @param e
+     */
+    touchEnd(e){
+      this.endY = e.changedTouches[0].pageY
+      if (this.endY - this.startY < -300) {
+        this._getReplyList()
+      }
+    },
+    /**
+     * 评论框失焦事件
+     */
+    blurHandler() {
+      this.showActiveClass = false
+    },
+    /**
+     * 点击播放视频，播放总次数加1
+     * @param id
+     * @param jcntarget
+     * @param jcnapp
+     */
+    postCommonStats() {
+      const jcntarget = TOOLS._GetQueryString('jcntarget') || ''
+      const jcnapp = TOOLS._GetQueryString('jcnapp') || ''
+      const {jcnappid, jcnuserid} = TOOLS._getJcn()
+      const config = {
+        method: 'post',
+        url: TOOLS.apis.commonStats,
+        data: JSON.stringify({
+          'itemId': this.works.id,
+          'action': 'h5detail',
+          'target': jcntarget,
+          'typeId': this.works.scenario.id,
+          'app': jcnapp,
+          'from': 'h5',
+          'clientEnv': {
+            'jcnappid': jcnappid + '',
+            'jcnuserid': jcnuserid + '',
+            'latitude': '0',
+            'longitude': '0',
+            'net': '',
+            'v': '0'
+          },
+          'userid': this.newUser.id
+        })
+      }
+      TOOLS._ajaxGetData(config)
+        .then(({statusCode}) => console.log)
+    },
+    /**
+     * pushhistory
+     */
+    _pushHistory() {
+      const state = {
+        title: 'temp',
+        url: 'self'
+      }
+      window.history.pushState(state, state.title, state.url)
     }
   },
   filters: {
@@ -302,7 +430,12 @@ const vm = new Vue({
       this._getReplyList()
     })
   },
-  mounted(){}
+  watch: {},
+  mounted(){
+    window.addEventListener('popstate', function () {
+      wx.closeWindow()
+    },false)
+  }
 })
 
 
