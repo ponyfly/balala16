@@ -42,8 +42,8 @@ util模板地址：[util常用公共函数](https://github.com/ponyfly/webpack4/
 需求：可以小窗播放，同时点击右下角全屏按钮可以全屏播放，再次点击返回按钮可以返回小窗
 实际开发：
 + `<video>`是视频的容器，初始要给`<video>`一个宽高，video的宽高并能使实际的视频撑满整个容器，给`<video>`一个黑色背景，实际视频的播放区域是撑满最短边，另一边自适应，其余部分为背景色
-+ 在android自带浏览器中可以在容器内播放，在ios的safari中默认会全屏播放，通过添加`webkit-playsinline="true" playsinline`同样也可以实现在容器中播放
-1. 假想通过点击全屏按钮实现全屏播放，在ios的safari中通过js设置`playsinline=false`并不能实现全屏播放，在android中，因为各厂家浏览器对video有着各自的解析，大部分是通过video标签实现的，但是
++ 在android自带浏览器中可以在容器内播放，在ios的safari中默认会全屏播放，通过添加`webkit-playsinline="true" playsinline`同样也可以实现在容器中播放。假想通过点击全屏按钮实现全屏播放，在ios的safari中通过js设置`playsinline=false`并不能实现全屏播放，在android中，因为各厂家浏览器对video有着各自的解析，大部分是通过video标签实现的，但是oppo，vivo很多机型是通过内置播放器去播放视频的，所以在android自带浏览器实现内联播放、全屏播放的切换也很困难，而且在ios上和android上的表现不一致也不是饿哦们想要的，所以最终确定在自带浏览器上使用内联播放
++ 在微信和qq平台上播放视频时，发现ios的`webkit-playsinline="true" playsinline`同样可以内联播放，同样也不能通过js设置为全屏播放。在android上是小窗播放，但是video会出现系统自带的控制条，点击系统自带的全屏按钮，视频会全屏播放，但是播放完会显示
 + 给`<video></video>`标签和播放按钮同时添加一个控制播放的事件，通过判断播放按钮的显示与隐藏来进一步判断下一次点击是播放还是暂停
 ```
 controlVideo() {
