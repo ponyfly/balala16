@@ -42,8 +42,8 @@ util模板地址：[util常用公共函数](https://github.com/ponyfly/webpack4/
 需求：可以小窗播放，同时点击右下角全屏按钮可以全屏播放，再次点击返回按钮可以返回小窗
 实际开发：
 + `<video>`是视频的容器，初始要给`<video>`一个宽高，video的宽高并能使实际的视频撑满整个容器，给`<video>`一个黑色背景，实际视频的播放区域是撑满最短边，另一边自适应，其余部分为背景色
-+ 在android自带浏览器中可以在容器内播放，在ios的safari中默认会全屏播放，通过添加`webkit-playsinline="true" playsinline`同样也可以实现在容器中播放。假想通过点击全屏按钮实现全屏播放，在ios的safari中通过js设置`playsinline=false`并不能实现全屏播放，在android中，因为各厂家浏览器对video有着各自的解析，大部分是通过video标签实现的，但是oppo，vivo很多机型是通过内置播放器去播放视频的，所以在android自带浏览器实现内联播放、全屏播放的切换也很困难，而且在ios上和android上的表现不一致也不是饿哦们想要的，所以最终确定在自带浏览器上使用内联播放
-+ 在微信和qq平台上播放视频时，发现ios的`webkit-playsinline="true" playsinline`同样可以内联播放，同样也不能通过js设置为全屏播放。在android上是小窗播放，但是video会出现系统自带的控制条，点击系统自带的全屏按钮，视频会全屏播放，但是播放完会显示
++ 在android自带浏览器中可以在容器内播放，在ios的safari中默认会全屏播放，通过添加`webkit-playsinline="true" playsinline`同样也可以实现在容器中播放。假想通过点击全屏按钮实现全屏播放，在ios的safari中通过js设置`playsinline=false`并不能实现全屏播放，在android中，因为各厂家浏览器对video有着各自的解析，大部分是通过video标签实现的，但是oppo，vivo很多机型是通过内置播放器去播放视频的，所以在android自带浏览器实现内联播放、全屏播放的切换也很困难，而且在ios上和android上的表现不一致也不是哦们想要的，所以最终确定在自带浏览器上使用内联播放
++ 在微信和qq平台上播放视频时，发现ios的`webkit-playsinline="true" playsinline`同样可以内联播放，同样也不能通过js设置为全屏播放。在android上是小窗播放，但是video会出现系统自带的控制条，点击系统自带的全屏按钮，视频会全屏播放，但是播放完会显示马化腾推荐的视频列表，这不是我们想要的，所以通过添加`x5-video-player-type="h5"`开启微信的同层播放，这样视频会单独开启一层，但是开启后发现视频还是原来容器那么大，希望全屏，x5浏览器video有进入全屏事件和退出全屏事件：`x5videoexitfullscreen和x5videoenterfullscreen`，所以可以在进入全屏时修改视频的宽为100%；高度自适应（实际播放区域还是居中，背景是黑色），后来又有bug了，在oppo和vivo手机上发现全屏时视频被才掉了一部分，后来发现是祖先元素们高度没有设置，可能是全屏的时候祖先元素的高度并没有被video撑开，而是使用了之前的被撑开的高度，所以把视屏才掉了，最终通过给祖先元素们设置高度为100%解决了这个问题（前提是`html,body{height:100%}`）
 + 给`<video></video>`标签和播放按钮同时添加一个控制播放的事件，通过判断播放按钮的显示与隐藏来进一步判断下一次点击是播放还是暂停
 ```
 controlVideo() {
@@ -68,8 +68,8 @@ controlVideo() {
       this.videoLoading = false
     },
 ```
-+ 前提：已经给video预设了宽高，ios系统safari浏览器打开上点击播放默认全屏播放，通过添加`webkit-playsinline="true" playsinline`可以实现内联播放（在已设定好的宽高范围内播放），在微信和qq上，通过添加`x5-playsinline="true"`可以实现内联播放，但是点击右下角全屏按钮时，通过js去掉``playsinline和webkit-playsinline="true"`属性，发现并不能进入全屏，因此最终敲定在ios上内联播放+6+
-+ 前提：已经给video预设了宽高；android系统中，因为`playsinline和webkit-playsinline="true"`并不对安卓生效，但是已经预设了宽高，所以自带浏览器可以内联播放，也可以全屏播放，但是在微信和qq中，因为点击播放会默认全屏播放，并且播放完后会出现广告视频，通过添加`x5-playsinline="true"`同样可以实现内联播放，但是期望全屏播放，可以添加`x5-video-player-type="h5"`开启同层播放，开启同层播放后，可以通过js动态改变视频宽高，并在视频上添加想要的东西
+小结：抽时间把这个视频播放做个组件~~~
+
 6. 移动端添加全屏遮罩后，在遮罩上滑动，底部的页面会跟随滑动
 给遮罩添加`touchmove`事件，并阻止默认行为，`<div class="mask" @touchmove.prevent></div>`
 7. vue filters过滤器使用方法
