@@ -400,7 +400,7 @@ const vm = new Vue({
             'net': '',
             'v': '0'
           },
-          'userid': this.newUser.id
+          'userid': this.works.user.id
         })
       }
       TOOLS._ajaxGetData(config)
