@@ -16,27 +16,7 @@
       <div class="creater" :class="{'full-screen-creater' : isFullScreen}" v-if="Object.keys(works).length > 0">
         <img class="creater-bg" src="../../imgs/icon-1-7.jpg">
         <div class="creater-c">
-          <div class="video-a" :class="{'full-screen-videoa' : isFullScreen}">
-            <video class="video"
-                   :class="{'full-screen': isFullScreen}"
-                   :src="works.movie.waterMarkUrl || works.movie.url"
-                   :poster="works.worksPic.url | formatImg"
-                   x5-video-player-type="h5"
-                   x5-playsinline="true"
-                   playsinline
-                   webkit-playsinline="true"
-                   ref="BalalaVideo"
-                   preload
-                   @ended="videoEndHandler"
-                   @waiting="waitingHandler"
-                   @playing="playingHandler"
-                   @x5videoexitfullscreen="exitHandler"
-                   @x5videoenterfullscreen="enterHandler"
-                   @click="controlVideo">
-            </video>
-            <img class="play-icon" src="../../imgs/icon-1-1.png" v-cloak v-show="showPlayIcon" @click="controlVideo">
-            <img class="loading" src="../../imgs/loading.gif" v-cloak v-show="videoLoading">
-          </div>
+          <balala-video :works="works" :isFullScreen.sync="isFullScreen"></balala-video>
           <div class="infos">
             <div class="info info-1" @click="goToUserCenter(-1)">
               <img class="avator" :src="works.user.headUrl | formatImg">

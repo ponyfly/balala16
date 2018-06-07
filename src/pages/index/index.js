@@ -4,10 +4,12 @@ import wx from 'weixin-js-sdk'
 import TOOLS from '../../util/util'
 import defaultHeadUrl from '../../imgs/default-avator.png'
 
+import '../../components/balalavideo'
+
 const vm = new Vue({
   el: "#app",
   data: {
-    showPlayIcon: true,
+    isFullScreen:false,
     showFixBottom: true,
     showActiveClass: false,
     commentText: '',
@@ -24,14 +26,11 @@ const vm = new Vue({
       nickName: 'defaultName',
       headUrl: defaultHeadUrl
     },
-    videoLoading: false,
-    isFullScreen: false,
     loadMore: {
       startY: 0,
       endY: 0
     },
-    runningEnv: {},
-    isFirstClickVideo: true
+    runningEnv: {}
   },
   methods: {
     /**
@@ -146,21 +145,6 @@ const vm = new Vue({
       }
     },
     /**
-     * 视频播放控制
-     */
-    controlVideo() {
-      if(this.showPlayIcon) {
-        if (this.isFirstClickVideo) {
-          this.postCommonStats()
-          this.isFirstClickVideo = false
-        }
-        this.$refs.BalalaVideo.play()
-      } else {
-        this.$refs.BalalaVideo.pause()
-      }
-      this.showPlayIcon = !this.showPlayIcon
-    },
-    /**
      * 跳转到应用商店
      * @param opt 点击位置
      */
@@ -233,28 +217,6 @@ const vm = new Vue({
         this.tipContent = ''
         this.showTipPanel = false
       },1000)
-    },
-    /**
-     * 视频结束事件
-     */
-    videoEndHandler() {
-      this.showPlayIcon = true
-      this.videoLoading = false
-    },
-    /**
-     * 退出全屏事件
-     */
-    exitHandler() {
-      this.showPlayIcon = true
-      this.videoLoading = false
-      this.isFullScreen = false
-      this.$refs.BalalaVideo.pause()
-    },
-    /**
-     * 进入全屏事件
-     */
-    enterHandler() {
-      this.isFullScreen = true
     },
     /**
      * 喜欢该作品
@@ -331,18 +293,6 @@ const vm = new Vue({
           this.maskType = 'like'
         })
 
-    },
-    /**
-     * 播放等待中事件
-     */
-    waitingHandler() {
-     this.videoLoading = true
-    },
-    /**
-     * 播放中事件
-     */
-    playingHandler() {
-      this.videoLoading = false
     },
     /**
      * 手指按下事件
