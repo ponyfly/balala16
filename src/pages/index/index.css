@@ -2,9 +2,9 @@
 /*common*/
 [v-cloak]{display: none}
 img{ border:none;}
-#app{ width:750px; height:100%; margin:0 auto;background: #fff;overflow: scroll}
-#app .page-container{ width:100%;}
-#app .page-container .page-content{ width:100%;}
+#app{ width:750px; height:100%; margin:0 auto;background: #fff;}
+#app .page-container{ width:100%;height: 100%}
+#app .page-container .page-content{ width:100%;height: 100%;overflow: scroll}
 /*creater样式*/
 #app .creater{ position: relative; height:823px;overflow:hidden;}
 #app .creater .creater-bg {display: block; width:100%;}
@@ -24,7 +24,7 @@ img{ border:none;}
 #app .creater .creater-c .infos .info span{vertical-align: middle; }
 .info:after {content: "";display: inline-block;height:100%;vertical-align: middle; }
 /*全屏播放样式*/
-#app .creater.full-screen-creater{overflow:visible;}
+#app .creater.full-screen-creater{ height:100%;overflow:visible;}
 #app .creater .creater-c .video-a.full-screen-videoa{ height:100vh;}
 #app .creater .creater-c .video-a .full-screen{ width:100%; height:auto;}
 #app .operation.full-screen-operation{display: none}

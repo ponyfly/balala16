@@ -67,17 +67,17 @@
             ref="textArea"
             data-a="评论">
         </textarea>
-      <div class="publish"
-           v-show="showActiveClass"
-           @click="publishComment"
-           data-a="发表">发表</div>
-      <div class="star" @click.once="showLike" data-a="喜欢">
-        <img src="../../imgs/icon-1-9.png" v-if="!works.hasAttention" v-cloak data-a="喜欢">
-        <img src="../../imgs/icon-1-10.png" v-cloak v-else data-a="喜欢">
-        <span v-cloak data-a="喜欢">{{works.likeCount}}</span>
+        <div class="publish"
+             v-show="showActiveClass"
+             @click="publishComment"
+             data-a="发表">发表</div>
+        <div class="star" @click.once="showLike" data-a="喜欢">
+          <img src="../../imgs/icon-1-9.png" v-if="!works.hasAttention" v-cloak data-a="喜欢">
+          <img src="../../imgs/icon-1-10.png" v-cloak v-else data-a="喜欢">
+          <span v-cloak data-a="喜欢">{{works.likeCount}}</span>
+        </div>
+        <div class="tip-panel" v-if="showTipPanel" v-cloak>{{tipContent}}</div>
       </div>
-      <div class="tip-panel" v-if="showTipPanel" v-cloak>{{tipContent}}</div>
-    </div>
 
       <!--评论列表区域-->
       <div class="comments" :class="{'full-screen-comments': isFullScreen}" v-if="commentList.length > 0">
