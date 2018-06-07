@@ -227,7 +227,7 @@ class Tools {
   }
 }
 const TOOLS = new Tools()
-const debug = TOOLS._GetQueryString('env') === 'pro' ? 0 : 1
+const debug = /pro|pre/.test(TOOLS._GetQueryString('env')) ? 0 : 1
 const urlOrigin = debug ? 'https://snaptest.j.cn' : 'https://snap.j.cn'
 const apis = {
   worksShareDetail: urlOrigin + '/api/worksShareDetail',
