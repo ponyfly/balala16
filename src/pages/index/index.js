@@ -33,7 +33,7 @@ const vm = new Vue({
      */
     _initStaticVal() {
       const ua = navigator.userAgent.toLowerCase();
-      this.worksId = TOOLS._GetQueryString('id') || 504533
+      this.worksId = TOOLS._GetQueryString('id') || 11495
       this.originHref = location.href
       this.runningEnv = {
         'weixin': ua.indexOf('micromessenger') > -1,
@@ -182,7 +182,9 @@ const vm = new Vue({
         "user": this.newUser,
         "replyTime": "刚刚"
       }
-      this.commentList.unshift(newComment)
+      setTimeout(()=> {
+        this.commentList.unshift(newComment)
+      }, 300)
       const config = {
         method: 'post',
         url: TOOLS.apis.sendReply,
@@ -355,8 +357,8 @@ const vm = new Vue({
      */
     _pushHistory() {
       const state = {
-        title: 'temp',
-        url: 'self'
+        title: document.title,
+        url: location.href + '#hash'
       }
       window.history.pushState(state, state.title, state.url)
     }
