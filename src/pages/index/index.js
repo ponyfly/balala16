@@ -13,23 +13,17 @@ const vm = new Vue({
     commentText: '',
     showTipPanel: false,
     tipContent: '',
-    isLike: false,
     works:{},
     maskType: '',
     nextPageRecord: '',
     loadedAll: false,
     commentList: [],
-    lastPostY:0,
     newUser: {
       nickName: 'defaultName',
       headUrl: defaultHeadUrl
     },
     videoLoading: false,
     isFullScreen: false,
-    loadMore: {
-      startY: 0,
-      endY: 0
-    },
     runningEnv: {},
     isFirstClickVideo: true
   },
@@ -40,7 +34,7 @@ const vm = new Vue({
      */
     _initStaticVal() {
       const ua = navigator.userAgent.toLowerCase();
-      this.worksId = TOOLS._GetQueryString('id') || 504533
+      this.worksId = TOOLS._GetQueryString('id') || 695
       this.originHref = location.href
       this.runningEnv = {
         'weixin': ua.indexOf('micromessenger') > -1,
@@ -204,7 +198,9 @@ const vm = new Vue({
         "user": this.newUser,
         "replyTime": "刚刚"
       }
-      this.commentList.unshift(newComment)
+      setTimeout(() => {
+        this.commentList.unshift(newComment)
+      },300)
       const config = {
         method: 'post',
         url: TOOLS.apis.sendReply,
@@ -260,7 +256,6 @@ const vm = new Vue({
      * 喜欢该作品
      */
     showLike() {
-      console.log('like')
       if (this.works.hasAttention) return
       TOOLS._send1_1('Click_Like')
       this.attentionOn()
@@ -411,8 +406,8 @@ const vm = new Vue({
      */
     _pushHistory() {
       const state = {
-        title: 'temp',
-        url: 'self'
+        title: document.title,
+        url: location.href + '#reload'
       }
       window.history.pushState(state, state.title, state.url)
     }
