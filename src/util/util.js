@@ -227,7 +227,7 @@ class Tools {
   }
 }
 const TOOLS = new Tools()
-const debug = 1
+const debug = 0
 const urlOrigin = debug ? 'https://snaptest.j.cn' : 'https://snap.j.cn'
 const apis = {
   worksShareDetail: urlOrigin + '/api/worksShareDetail',

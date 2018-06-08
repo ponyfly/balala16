@@ -1,7 +1,7 @@
 require('./index.css')
 import Vue from 'vue'
 import wx from 'weixin-js-sdk'
-import BlalaVideo from '../../components/balalavideo'
+import BlalaVideo from '../../components/BalalaVideo'
 import TOOLS from '../../util/util'
 import defaultHeadUrl from '../../imgs/default-avator.png'
 
@@ -377,7 +377,14 @@ const vm = new Vue({
   components: {
     'balala-video': BlalaVideo
   },
-  watch: {},
+  watch: {
+    isFullScreen: {
+      handler(newVal){
+        console.log(newVal)
+      },
+      immediate: true
+    }
+  },
   mounted(){
     window.addEventListener('popstate', function () {
       wx.closeWindow()

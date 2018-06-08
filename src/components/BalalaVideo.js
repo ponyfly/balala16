@@ -66,7 +66,7 @@ export default {
     controlVideo() {
       if(this.showPlayIcon) {
         if (this.isFirstClickVideo) {
-          this.$root.postCommonStats()
+          this.$emit('post-common-stats')
           this.isFirstClickVideo = false
         }
         this.$refs.BalalaVideo.play()

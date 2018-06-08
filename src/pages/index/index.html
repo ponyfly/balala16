@@ -16,7 +16,7 @@
       <div class="creater" :class="{'full-screen-creater' : isFullScreen}" v-if="Object.keys(works).length > 0">
         <img class="creater-bg" src="../../imgs/icon-1-7.jpg">
         <div class="creater-c">
-          <balala-video :works="works" :isFullScreen.sync="isFullScreen"></balala-video>
+          <balala-video :works="works" :is-full-screen.sync="isFullScreen" @post-common-stats="postCommonStats"></balala-video>
           <div class="infos">
             <div class="info info-1" @click="goToUserCenter(-1)">
               <img class="avator" :src="works.user.headUrl | formatImg">

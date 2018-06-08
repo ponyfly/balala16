@@ -136,6 +136,43 @@ new Vue({
   <component-a></component-a>
 </div>
 ```
+在抽离组件中遇到要调用父组件的事件，有两种方案
+1. 使用`this.$root.rootMethod`（因为这个项目比较简单，所以根组件就是父组件）
+2. 使用自定义事件,`v-on`事件监听器在 DOM 模板中会被自动转换为全小写 (因为 HTML 是大小写不敏感的)，*推荐始终使用 kebab-case 的事件名*
+```
+//index.html
+ <balala-video :works="works" :is-full-screen.sync="isFullScreen" @post-common-stats="postCommonStats"></balala-video>
+//balalVideo.js
+···
+this.$emit('post-common-stats')
+···
+```
+小结：props，自定义事件名，自定义组件名大小写。
+因为 HTML 是大小写不敏感的,所以会把所有大写转为小写
+
+1. props
+```
+Vue.component('BlogPost', {
+  // 在 JavaScript 中是 camelCase 的
+  props: ['postTitle'],
+  template: '<h3>{{ postTitle }}</h3>'
+})
+在DOM模板中使用,始终是有kebab-case
+<blog-post post-title="hello!"></blog-post>
+使用字符串模板中不受该限制
+```
+2. *推荐始终使用 kebab-case 的事件名*
+3. 自定义组件名
+```
+//定义组件名,*推荐使用PascalCase*
+Vue.component('ConponentName',{})
+//使用自定义组件
+<!-- 在单文件组件和字符串模板中 -->
+<MyComponent/>
+<!-- 在 DOM 模板中 -->
+<my-component></my-component>
+```
+*所以：在DOM中始终是kebab-case,在单文件组件和字符串模板中，prop和自定义组件使用PascalCase，自定义事件使用kebab-case*
 
 
 
