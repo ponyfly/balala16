@@ -86,5 +86,56 @@ new Vue({
 //html
 <img class="poster" :src="item.worksPic.url | formatImg">
 ```
+***
+### 2018.6.8  项目重构，优化
+目的：抽离video组件；提高便于维护管理
+
+#### 抽离video组件
+创建组件有两种方法，第一种是全局注册组件，另一种是局部注册组件，
++ 全局注册
+```
+Vue.component('my-component', {/*····*/})
+new Vue({el:'#app'})
+```
++ 局部注册
+> 全局注册所有的组件意味着即便你已经不再使用一个组件了，它仍然会被包含在你最终的构建结果中。这造成了用户下载的 JavaScript 的无谓的增加。
+
+1. 常规局部注册
+
+```
+const componentA = {/*···*/}
+  new Vue({
+    data:{},
+    methods: {},
+    componets: {
+      'component-a': componentA
+    }
+})
+```
+
+2. es6模块化局部注册
+
+```
+//componentA.js
+export default {
+  template:`···`,
+  data(){
+      return{}
+  },
+  methods:{}
+}
+//main.js
+import ComponentA from './ComponentA.js'
+new Vue({
+  components: {
+    'component-a': ComponentA
+  }
+})
+//index.html
+<div id="app">
+  <component-a></component-a>
+</div>
+```
+
 
 

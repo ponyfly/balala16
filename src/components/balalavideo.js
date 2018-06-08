@@ -1,8 +1,7 @@
-import Vue from 'vue'
 import icon1 from '../imgs/icon-1-1.png'
 import icon2 from '../imgs/loading.gif'
 
-Vue.component('balala-video', {
+export default {
   template:`
 <div class="video-a" :class="{'full-screen-videoa' : isFullScreen}">
     <video class="video"
@@ -22,19 +21,25 @@ Vue.component('balala-video', {
           @x5videoenterfullscreen="enterHandler"
           @click="controlVideo">
     </video>
-    <img class="play-icon" :src="icon.icon1" v-cloak v-show="showPlayIcon" @click="controlVideo">
-    <img class="loading" :src="icon.icon2" v-cloak v-show="videoLoading">
+    <img class="play-icon" src="${icon1}" v-cloak v-show="showPlayIcon" @click="controlVideo">
+    <img class="loading" src="${icon2}" v-cloak v-show="videoLoading">
 </div>
 `,
-  props:['works','isFullScreen'],
+  props:{
+    works: {
+      type: Object,
+      required: true,
+      default: {}
+    },
+    isFullScreen: {
+      type: Boolean,
+      default: false
+    }
+  },
   data(){
     return {
       showPlayIcon: true,
       videoLoading: false,
-      icon: {
-        icon1,
-        icon2
-      },
       isFirstClickVideo: true
     }
   },
@@ -71,7 +76,7 @@ Vue.component('balala-video', {
       this.showPlayIcon = !this.showPlayIcon
     },
     updateIsFullScreen(bool){
-      this.$emit('isFullScreen', bool)
+      this.$emit('update:isFullScreen', bool)
     }
   }
-})
+}

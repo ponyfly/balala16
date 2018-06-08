@@ -1,10 +1,9 @@
 require('./index.css')
 import Vue from 'vue'
 import wx from 'weixin-js-sdk'
+import BlalaVideo from '../../components/balalavideo'
 import TOOLS from '../../util/util'
 import defaultHeadUrl from '../../imgs/default-avator.png'
-
-import '../../components/balalavideo'
 
 const vm = new Vue({
   el: "#app",
@@ -15,7 +14,6 @@ const vm = new Vue({
     commentText: '',
     showTipPanel: false,
     tipContent: '',
-    isLike: false,
     works:{},
     maskType: '',
     nextPageRecord: '',
@@ -25,10 +23,6 @@ const vm = new Vue({
     newUser: {
       nickName: 'defaultName',
       headUrl: defaultHeadUrl
-    },
-    loadMore: {
-      startY: 0,
-      endY: 0
     },
     runningEnv: {}
   },
@@ -379,6 +373,9 @@ const vm = new Vue({
       this._getWorksShareDetail()
       this._getReplyList()
     })
+  },
+  components: {
+    'balala-video': BlalaVideo
   },
   watch: {},
   mounted(){
