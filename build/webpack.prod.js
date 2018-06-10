@@ -4,13 +4,10 @@ const os = require('os')
 const webpack = require('webpack')
 const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length })
 const HtmlPlugin = require('html-webpack-plugin')
-const ExtractPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin  = require('mini-css-extract-plugin')
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const CleanPlugin = require('clean-webpack-plugin')
-const PurifyCSSPlugin = require('purifycss-webpack')
 const WebpackParallelUglifyPlugin = require('webpack-parallel-uglify-plugin')
-// const ProgressBarPlugin = require('progress-bar-webpack-plugin')
-// const chalk = require('chalk')
-// const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin')
 const merge = require('webpack-merge')
 
 const base = require('./webpack.base')
@@ -24,7 +21,7 @@ function getEntryHtml() {
     entryHtmls.push(new HtmlPlugin({
       template: entries[name],
       filename:`${name}.html`,
-      chunks: [`manifest`,  'vendors', name]
+      chunks: [`manifest`, 'vendors', name]
     }))
   })
   return entryHtmls
@@ -36,7 +33,7 @@ module.exports = merge(base, {
     path: utils.absolutePath('dist'),
     filename: "js/[name].js",
     chunkFilename: "js/[name].js",
-    publicPath: "https://snapstatic.j.cn/sharepage/"
+    publicPath: "/"
   },
   module: {
     rules: [
@@ -50,13 +47,11 @@ module.exports = merge(base, {
       },
       {
         test: /\.css$/,
-        use: ExtractPlugin.extract({
-          use: [
-            {loader: 'css-loader'},
-            {loader: 'postcss-loader'}
-          ],
-          publicPath: '../'
-        }),
+        use: [
+          {loader: MiniCssExtractPlugin.loader},
+          {loader: 'css-loader'},
+          {loader: 'postcss-loader'}
+        ],
         include: utils.absolutePath('src'),
         exclude: utils.absolutePath('node_modules'),
       }
@@ -66,30 +61,26 @@ module.exports = merge(base, {
     splitChunks: {
       cacheGroups: {
         vendors: {
-          test:  /[\\/]node_modules[\\/]/,
+          test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
           chunks: 'initial'
         }
       }
     },
+    minimizer: [
+      new OptimizeCSSAssetsPlugin()
+    ],
     runtimeChunk: {
       name:'manifest'
     }
   },
   plugins: [
     new CleanPlugin(['dist'],{
-      root: utils.absolutePath(),
-      // exclude: ['dll']
+      root: utils.absolutePath()
     }),
     new webpack.HashedModuleIdsPlugin(),
     ...getEntryHtml(),
-    // new HtmlWebpackIncludeAssetsPlugin({
-    //   assets: [
-    //     'dll/vendor.dll.js'
-    //   ],
-    //   append: false
-    // }),
-    new ExtractPlugin({
+    new MiniCssExtractPlugin({
       filename: "css/[name].css"
     }),
     new HappyPack({
@@ -97,10 +88,8 @@ module.exports = merge(base, {
       loaders: ['babel-loader?cacheDirectory=true'],
       threadPool: happyThreadPool
     }),
-    new PurifyCSSPlugin({
-      paths: glob.sync(utils.absolutePath('src/pages/*/*.html'))
-    }),
     new WebpackParallelUglifyPlugin({
+      cacheDir: utils.absolutePath('tmp'),
       uglifyJS: {
         output: {
           beautify: false, //不需要格式化
@@ -113,12 +102,6 @@ module.exports = merge(base, {
           reduce_vars: true // 提取出出现多次但是没有定义成变量去引用的静态值
         }
       }
-    }),
-    // new webpack.DllReferencePlugin({
-    //   manifest: require(utils.absolutePath('dist/dll/vendor.manifest.json'))
-    // }),
-    // new ProgressBarPlugin({
-    //   format: '  build [:bar] ' + chalk.green.bold(':percent') + ' (:elapsed seconds)'
-    // })
+    })
   ]
 })

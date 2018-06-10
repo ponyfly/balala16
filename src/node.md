@@ -173,6 +173,8 @@ Vue.component('ConponentName',{})
 <my-component></my-component>
 ```
 *所以：在DOM中始终是kebab-case,在单文件组件和字符串模板中，prop和自定义组件使用PascalCase，自定义事件使用kebab-case*
++ 抽离组建后发现播放按钮图标显示位置有误，loading图标位置也不对
+原因： webpack使用了`purify-css-plugin`插件,因为组件是定义在js中的，所以插件会把用不到的css都删掉，所以去掉该插件就可以了。
 
 
 

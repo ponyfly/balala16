@@ -21,8 +21,8 @@ export default {
           @x5videoenterfullscreen="enterHandler"
           @click="controlVideo">
     </video>
-    <img class="play-icon" src="${icon1}" v-cloak v-show="showPlayIcon" @click="controlVideo">
-    <img class="loading" src="${icon2}" v-cloak v-show="videoLoading">
+    <img class="play-icon" src="${icon1}" v-show="showPlayIcon" @click="controlVideo">
+    <img class="loading" src="${icon2}" v-show="videoLoading">
 </div>
 `,
   props:{
